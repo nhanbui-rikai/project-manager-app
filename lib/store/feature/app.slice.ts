@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface AppState {
-  isOpenOrClose: boolean
+  isOpenOrClose: boolean;
 }
 
 const initialState: AppState = {
-  isOpenOrClose: false
-}
+  isOpenOrClose: false,
+};
 
 export const AppSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
     toggleOpenSideBar: (state) => {
-      state.isOpenOrClose = !state.isOpenOrClose
-    }
-  }
-})
+      state.isOpenOrClose = !state.isOpenOrClose;
+    },
+  },
+});
 
-export const { toggleOpenSideBar } = AppSlice.actions
-export default AppSlice.reducer
+export const { toggleOpenSideBar } = AppSlice.actions;
+export default AppSlice.reducer;

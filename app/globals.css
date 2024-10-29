@@ -19,3 +19,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.main-bg-color {
+  @apply bg-gradient-to-r from-indigo-500 to-indigo-600/90;
+}

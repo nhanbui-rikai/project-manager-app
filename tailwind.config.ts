@@ -12,6 +12,16 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        mobile: "480px",
+        tablet: "768px",
+        pc: "1024px",
+        "large-pc": "1280px",
+      },
+      height: {
+        authScreen: "calc(100vh - 32px)",
+        main: "calc(100vh - 120px)",
+      },
     },
   },
   plugins: [],
