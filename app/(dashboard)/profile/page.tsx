@@ -2,10 +2,11 @@
 
 import { Autocomplete, Avatar, Button, TextField } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import "./profile.css";
 
 export default function Profile() {
   return (
-    <div className="flex">
+    <div className="flex profile-wrapper">
       <div className="flex-[0.3] px-4">
         <div className="rounded-lg bg-white shadow-sm shadow-slate-500 p-4">
           <div className="flex flex-col">
@@ -42,12 +43,12 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 px-4">
         <div className="px-4 rounded-lg bg-white shadow-sm shadow-slate-500 py-4 h-full">
           <div className="flex flex-col">
             <h2 className="font-bold py-5 text-xl">Personal Info</h2>
           </div>
-          <div className="flex">
+          <div className="flex profile-wrapper">
             <div className="flex-1 px-2">
               <TextField sx={{ width: "100%" }} label="First name" />
             </div>
@@ -55,7 +56,7 @@ export default function Profile() {
               <TextField sx={{ width: "100%" }} label="Last name" />
             </div>
           </div>
-          <div className="flex mt-4">
+          <div className="flex mt-4 profile-wrapper">
             <div className="flex-1 px-2">
               <TextField sx={{ width: "100%" }} label="Phone number" />
             </div>
