@@ -6,6 +6,8 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import validation from "./validation";
+import { register } from "@/api/authService";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const form = useForm({
@@ -24,17 +26,21 @@ export default function Register() {
     userName,
     email,
     password,
-    confirmPassword,
   }: {
     userName: string;
     email: string;
     password: string;
     confirmPassword: string;
   }) => {
-    console.log(userName);
-    console.log(email);
-    console.log(password);
-    console.log(confirmPassword);
+    register({ email, password, userName, role: "member" })
+      .then((res) => {
+        form.reset();
+        toast.success("Register successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message);
+      });
   };
 
   return (

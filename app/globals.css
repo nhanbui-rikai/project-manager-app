@@ -29,6 +29,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html *::-webkit-scrollbar {
+  border-radius: 0;
+  width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(22, 24, 35, 0.06);
+}
+
+html *::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .main-bg-color {
   @apply bg-gradient-to-r from-indigo-500 to-indigo-600/90;
 }

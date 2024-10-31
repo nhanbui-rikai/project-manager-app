@@ -77,6 +77,8 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
           "& .MuiDialog-paper": {
             margin: 0,
             width: "90%",
+            height: "100%",
+            overflowY: "overlay",
           },
           "& .MuiDialog-container": {
             width: "100%",
