@@ -1,10 +1,20 @@
 "use client";
-import { Button, TextField } from "@mui/material";
-import Link from "next/link";
+import { useAppDispatch } from "@/hooks/useStore";
+import { login } from "@/lib/store/feature/auth.slice";
+import { loginByEmail } from "@/api/authService";
+
 import React from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import { Button, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export default function Login() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -13,8 +23,26 @@ export default function Login() {
   });
 
   const handleLogin = ({ email, password }: { email: string; password: string }) => {
-    console.log(email);
-    console.log(password);
+    loginByEmail({ email, password })
+      .then((res) => {
+        if (!res) throw new Error("Not found user");
+        const userData: any = { ...res };
+        delete userData.password;
+        dispatch(
+          login({
+            id: userData.id,
+            email: userData.email,
+            user_name: userData.user_name,
+            role: userData.role,
+          }),
+        );
+        router.push("/");
+        toast.success("Login successfully");
+      })
+      .catch((err) => {
+        form.reset();
+        toast.error("Email or password incorrect");
+      });
   };
 
   return (
