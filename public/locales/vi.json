@@ -1,0 +1,11 @@
+{
+  "app": {
+    "sidebar": {
+      "dashboard": "Trang chủ",
+      "project": "Dự án",
+      "task": "Nhiệm vụ",
+      "setting": "Cài đặt",
+      "user": "Người dùng"
+    }
+  }
+}

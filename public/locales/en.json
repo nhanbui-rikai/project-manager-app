@@ -1,0 +1,11 @@
+{
+  "app": {
+    "sidebar": {
+      "dashboard": "Dashboards",
+      "project": "Projects",
+      "task": "Tasks",
+      "setting": "Settings",
+      "user": "Users"
+    }
+  }
+}

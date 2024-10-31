@@ -4,7 +4,8 @@ import React from "react";
 
 const DetailUserPage = () => {
   const params = useParams<{ id: string }>();
-  return <div>detail user ${params.id}</div>;
+
+  return <div></div>;
 };
 
 export default DetailUserPage;
