@@ -17,6 +17,7 @@
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "@mui/styled-engine-sc": "^6.1.5",
+    "@mui/x-data-grid": "^7.22.0",
     "@mui/x-date-pickers": "^7.22.0",
     "@reduxjs/toolkit": "^2.3.0",
     "@tippyjs/react": "^4.2.6",

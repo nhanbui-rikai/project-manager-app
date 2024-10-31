@@ -14,7 +14,7 @@ const ExpandSideBar: React.FC<ExpandSideBarProps> = ({ children }: { children: R
       <aside
         id="logo-sidebar"
         className={cn(
-          "fixed top-0 bg-slate-50 shadow-md left-0 -translate-x-full z-40 w-full h-screen transition-transform duration-500 ease-in-out transform",
+          "fixed top-0  bg-slate-50 shadow-md left-0 translate-x-0 z-40 w-full h-screen transition-transform duration-500 ease-in-out transform",
           isOpenOrClose ? "-translate-x-full" : "translate-x-0",
           "tablet:w-64",
         )}

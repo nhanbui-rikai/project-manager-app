@@ -11,6 +11,13 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        danger: "#FF5E5E",
+        primary: "#7571F9",
+        success: "#6FD96F",
+        warning: "#F29D56",
+        secondary: "#9097C4",
+        light: "#f8f9fa",
+        dark: "#333333",
       },
       screens: {
         mobile: "480px",
