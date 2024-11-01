@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <StoreProvider>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
+          <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} />
           <div>{children}</div>
         </body>
       </StoreProvider>

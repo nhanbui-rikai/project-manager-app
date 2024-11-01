@@ -1,5 +1,5 @@
 import db from "@/lib/firebase/firestore";
-import { addDoc, collection, getDocs, query, Timestamp, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from "firebase/firestore";
 
 export async function loginByEmail({ email, password }: { email: string; password: string }) {
   try {
@@ -14,25 +14,14 @@ export async function loginByEmail({ email, password }: { email: string; passwor
       };
       return user;
     } else {
-      console.log("Không tìm thấy người dùng.");
+      throw new Error("Not found user");
     }
   } catch (error) {
-    console.error("Lỗi khi truy vấn:", error);
     throw error;
   }
 }
 
-export async function register({
-  email,
-  password,
-  userName,
-  role,
-}: {
-  email: string;
-  password: string;
-  userName: string;
-  role: string;
-}) {
+export async function register({ email, password, userName, role }: RegisterForm) {
   try {
     const q = query(collection(db, "users"), where("email", "==", email));
 
@@ -40,10 +29,9 @@ export async function register({
     if (!querySnapshot.empty) {
       throw new Error("Email is existed");
     } else {
-      // Nếu email chưa tồn tại, tiến hành tạo user mới
       const newUser = {
         email,
-        password, // Lưu ý: trong thực tế, không lưu plain password mà phải mã hóa
+        password,
         userName,
         role,
         created_at: Timestamp.now(),
@@ -53,6 +41,44 @@ export async function register({
       const docRef = await addDoc(collection(db, "users"), newUser);
 
       return { id: docRef.id, ...newUser };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateProfile({ userName, bio, gender, phoneNumber, id }: User) {
+  try {
+    const userDocRef = doc(db, "users", id || "");
+
+    await updateDoc(userDocRef, {
+      user_name: userName,
+      phone_number: phoneNumber,
+      gender: gender,
+      bio: bio,
+    });
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function changePassword({ currentPassword, newPassword, userId }: ChangePassForm) {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const docSnap = await getDoc(userDocRef);
+    if (docSnap.exists()) {
+      const user = docSnap.data();
+
+      if (user.password !== currentPassword) {
+        throw new Error("Current password is not correct");
+      }
+      await updateDoc(userDocRef, {
+        password: newPassword,
+      });
+      return true;
+    } else {
+      throw new Error("Not found");
     }
   } catch (error) {
     throw error;

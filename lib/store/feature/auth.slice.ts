@@ -1,8 +1,6 @@
 "use client";
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loginByEmail } from "@/api/authService";
-import { toast } from "react-toastify";
 
 export interface AuthState {
   isLogin: boolean;
