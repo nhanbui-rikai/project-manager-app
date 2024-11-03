@@ -30,10 +30,13 @@ export default function Login() {
         delete userData.password;
         dispatch(
           login({
-            id: userData.id,
-            email: userData.email,
-            user_name: userData.user_name,
-            role: userData.role,
+            id: userData?.id,
+            email: userData?.email,
+            user_name: userData?.user_name,
+            phone_number: userData?.phone_number,
+            gender: userData?.gender,
+            role: userData?.role,
+            bio: userData?.bio,
           }),
         );
         router.push("/");

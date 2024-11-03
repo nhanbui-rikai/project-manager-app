@@ -4,11 +4,21 @@
 
 /* Tablet */
 @media (min-width: 740px) and (max-width: 1023px) {
+  .profile-wrapper {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .follow-btn {
+    justify-content: start;
+  }
 }
 /* mobile  */
 @media (max-width: 740px) {
   .profile-wrapper {
     flex-direction: column;
     gap: 16px;
+  }
+  .follow-btn {
+    justify-content: start;
   }
 }

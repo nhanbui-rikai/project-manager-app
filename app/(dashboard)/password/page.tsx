@@ -1,11 +1,17 @@
 "use client";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Button, TextField } from "@mui/material";
-import React from "react";
+import { Button, CircularProgress, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import validation from "./validation";
+import { useAppSelector } from "@/hooks/useStore";
+import { changePassword } from "@/api/authService";
+import { toast } from "react-toastify";
 
 export default function Password() {
+  const { currentUser } = useAppSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm({
     defaultValues: {
       oldPassword: "",
@@ -17,18 +23,19 @@ export default function Password() {
     reValidateMode: "onBlur",
   });
 
-  const handleChangePassword = ({
-    oldPassword,
-    newPassword,
-    confirmPassword,
-  }: {
-    oldPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-  }) => {
-    console.log(oldPassword);
-    console.log(newPassword);
-    console.log(confirmPassword);
+  const handleChangePassword = ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => {
+    setIsLoading(true);
+    changePassword({ newPassword, currentPassword: oldPassword, userId: currentUser.id })
+      .then((res) => {
+        toast.success("Change password successfully");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      })
+      .finally(() => {
+        form.reset();
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -96,7 +103,13 @@ export default function Password() {
             </div>
           </div>
           <div className="mr-2 flex justify-center">
-            <Button type="submit" className="mt-5" variant="contained" sx={{ width: 150, bgcolor: "#6366f1" }}>
+            <Button
+              startIcon={isLoading && <CircularProgress size={18} />}
+              type="submit"
+              className="mt-5"
+              variant="contained"
+              sx={{ width: 150, bgcolor: "#6366f1" }}
+            >
               Save
             </Button>
           </div>
