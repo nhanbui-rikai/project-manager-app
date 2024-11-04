@@ -23,6 +23,7 @@ const LandingLayout = ({ children }: { children: React.ReactNode }) => {
           <MenuSidebarItems icon={<AssignmentIcon />} path="/task" name="Tasks" />
           <MenuSidebarItems icon={<PersonIcon />} path="/user" name="User" />
           <MenuSidebarItems icon={<SettingsIcon />} path="/setting" name="Settings" />
+          <MenuSidebarItems icon={<SettingsIcon />} path="/create_task" name="CreateTask" />
         </div>
       </ExpandSideBar>
 
