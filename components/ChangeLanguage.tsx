@@ -84,25 +84,27 @@ export default function LanguageSwitcher() {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem>
+          <MenuItem onClick={() => handleLanguageChange("en")}>
             <ReactCountryFlag
-              onClick={() => handleLanguageChange("en")}
               countryCode="US"
               svg
               cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
               cdnSuffix="svg"
+              className="me-3"
               title="US"
             />
+            US
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={() => handleLanguageChange("vi")}>
             <ReactCountryFlag
-              onClick={() => handleLanguageChange("vi")}
               countryCode="VN"
               svg
               cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
               cdnSuffix="svg"
               title="VN"
+              className="me-3"
             />
+            VN
           </MenuItem>
         </Menu>
       </>

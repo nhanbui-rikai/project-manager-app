@@ -21,6 +21,8 @@ import MessageDialog from "@/components/MessageDialog";
 
 export default function UserPage() {
   const [user, setUser] = React.useState<DocumentData[] | null>(null);
+  const [order, setOrder] = React.useState<"asc" | "desc">("asc");
+  const [orderBy, setOrderBy] = React.useState<string>("id");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
@@ -97,6 +99,27 @@ export default function UserPage() {
     }
   };
 
+  const handleRequestSort = (property: string) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const sortedUsers = user
+    ? [...user].sort((a, b) => {
+        const aValue = a[orderBy];
+        const bValue = b[orderBy];
+
+        if (aValue < bValue) {
+          return order === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return order === "asc" ? 1 : -1;
+        }
+        return 0;
+      })
+    : [];
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }} className="border-none shadow-none">
       <MessageDialog
@@ -118,7 +141,13 @@ export default function UserPage() {
 
       <MessageBox open={openDetailModal} onClose={handleCloseModal}>
         {selectUser && (
-          <TableData column={rawCol}>
+          <TableData
+            column={rawCol}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            tableHeight="calc(100vh - 200px)"
+          >
             <TableRow>
               <TableCell>{selectUser.id}</TableCell>
               <TableCell>{selectUser.email}</TableCell>
@@ -131,10 +160,16 @@ export default function UserPage() {
       </MessageBox>
 
       <RenderCondition condition={!loading}>
-        <TableData column={column} tableHeight="calc(100vh - 200px)">
+        <TableData
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+          column={column}
+          tableHeight="calc(100vh - 200px)"
+        >
           <RenderCondition condition={Boolean(user)}>
-            {user &&
-              user.map((user, index) => (
+            {sortedUsers.length > 0 &&
+              sortedUsers.map((user, index) => (
                 <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={user.id}>
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{user.email}</TableCell>

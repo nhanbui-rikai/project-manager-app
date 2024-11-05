@@ -18,21 +18,15 @@ const LandingLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Main content */}
       <ExpandSideBar>
         <div className="w-full">
-          <MenuSidebarItems icon={<DashboardIcon />} path="/" name="Dashboard" />
           <MenuSidebarItems icon={<WorkIcon />} path="/project" name="Projects" />
-          <MenuSidebarItems icon={<AssignmentIcon />} path="/task" name="Tasks" />
           <MenuSidebarItems icon={<PersonIcon />} path="/user" name="User" />
-          <MenuSidebarItems icon={<SettingsIcon />} path="/setting" name="Settings" />
           <MenuSidebarItems icon={<SettingsIcon />} path="/create_task" name="CreateTask" />
         </div>
       </ExpandSideBar>
 
       <MiniSideBar>
-        <MenuSidebarItems icon={<DashboardIcon />} path="/" />
         <MenuSidebarItems icon={<WorkIcon />} path="/project" />
-        <MenuSidebarItems icon={<AssignmentIcon />} path="/task" />
         <MenuSidebarItems icon={<PersonIcon />} path="/user" />
-        <MenuSidebarItems icon={<SettingsIcon />} path="/setting" />
       </MiniSideBar>
 
       <div
@@ -42,7 +36,7 @@ const LandingLayout = ({ children }: { children: React.ReactNode }) => {
         )}
       >
         <Header />
-        <div className="bg-slate-50 mt-4 h-main p-4 rounded-md overflow-auto">{children}</div>
+        <div className="bg-white mt-4 h-main p-4 rounded-md overflow-auto">{children}</div>
       </div>
     </main>
   );
