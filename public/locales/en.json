@@ -7,5 +7,10 @@
       "setting": "Settings",
       "user": "Users"
     }
+  },
+  "no_data": "No data",
+  "message": {
+    "delete_success": "Delete Successfully",
+    "delete_err": "Delete Failure"
   }
 }

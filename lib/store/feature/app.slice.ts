@@ -6,11 +6,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface AppState {
   isOpenOrClose: boolean;
   language: string;
+  loading: boolean;
 }
 
 const initialState: AppState = {
   isOpenOrClose: false,
   language: "en",
+  loading: false,
 };
 
 export const AppSlice = createSlice({
@@ -23,6 +25,10 @@ export const AppSlice = createSlice({
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
       i18n.changeLanguage(action.payload);
+    },
+
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
   },
 });
