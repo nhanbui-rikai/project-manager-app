@@ -59,11 +59,13 @@ html *::-webkit-scrollbar-track {
     max-width: 960px;
   }
 }
+
 @media (min-width: 768px) {
   .container {
     max-width: 720px;
   }
 }
+
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
