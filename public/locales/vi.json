@@ -6,6 +6,42 @@
       "task": "Nhiệm vụ",
       "setting": "Cài đặt",
       "user": "Người dùng"
+    },
+    "profilePage": {
+      "title": "Thông tin cá nhân",
+      "userNameLabel": "Tên người dùng",
+      "phoneNumberLabel": "Số điện thoại",
+      "genderLabel": "Giới tính",
+      "aboutMeLabel": "Mô tả về tôi",
+      "updateBtn": "Lưu",
+      "genderMale": "Nam",
+      "genderFemale": "Nữ",
+      "followBtn": "Theo dõi"
+    },
+    "taskEditor": {
+      "memberLabel": "Thành viên",
+      "titleLabel": "Tiêu đề",
+      "descriptionLabel": "Mô tả",
+      "estimatedHourLabel": "Thời gian ước lượng",
+      "actualHourLabel": "Thời gian thực tế",
+      "duedateLabel": "Ngày hết hạn",
+      "leaveBtn": "Rời khỏi",
+      "joinBtn": "Tham gia",
+      "completedStatus": "Hoàn thành",
+      "pendingStatus": "Chưa hoàn thành",
+      "dayLabel": "Ngày",
+      "desciptionExample": "Thêm thông tin mô tả cho thẻ...",
+      "saveBtn": "Lưu",
+      "noResult": "Không tìm thấy"
+    },
+    "passwordPage": {
+      "title": "Thay đổi mật khẩu của bạn",
+      "oldPasswordLabel": "Mật khẩu cũ",
+      "newPasswordLabel": "Mật khẩu mới",
+      "confirmPasswordLabel": "Xác nhận lại mật khẩu",
+      "success": "Thay đổi mật khẩu thành công",
+      "fail": "Thay đổi mật khẩu thất bại",
+      "saveBtn": "Lưu"
     }
   },
   "no_data": "Không có dữ liệu",
