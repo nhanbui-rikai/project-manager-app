@@ -4,6 +4,7 @@ import "./globals.css";
 import StoreProvider from "@/components/StoreProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AuthContext from "@/hoc/AuthContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StoreProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} />
-          <div>{children}</div>
-        </body>
+        <AuthContext>
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} />
+            <div>{children}</div>
+          </body>
+        </AuthContext>
       </StoreProvider>
     </html>
   );
