@@ -7,5 +7,9 @@
       "setting": "Cài đặt",
       "user": "Người dùng"
     }
+  },
+  "no_data": "Không có dữ liệu",
+  "message": {
+    "delete_success": "Xoá thành công"
   }
 }

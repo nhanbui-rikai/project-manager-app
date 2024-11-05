@@ -25,7 +25,7 @@ const ExpandSideBar: React.FC<ExpandSideBarProps> = ({ children }: { children: R
       >
         <div className="min-h-16 relative main-bg-color flex items-center justify-center p-4">
           <MenuIcon
-            className="z-50 top-5 left-2 absolute text-white mobile:hidden"
+            className="z-50 top-5 left-2 absolute text-white tablet:hidden"
             onClick={() => dispatch(toggleOpenSideBar())}
           ></MenuIcon>
           <span className="text-white font-bold">Manager</span>
