@@ -9,10 +9,14 @@ import { updateProfile } from "@/api/authService";
 import { toast } from "react-toastify";
 import { updateUser } from "@/lib/store/feature/auth.slice";
 import { useState } from "react";
+import { User } from "@/constants/types";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
   const { currentUser } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -40,8 +44,8 @@ export default function Profile() {
 
   const form = useForm({
     defaultValues: {
-      userName: currentUser?.user_name,
-      phoneNumber: currentUser?.phone_number,
+      userName: currentUser?.userName,
+      phoneNumber: currentUser?.phoneNumber,
       gender: currentUser?.gender,
       bio: currentUser?.bio,
     },
@@ -60,21 +64,21 @@ export default function Profile() {
               />
 
               <div>
-                <h2 className="text-[#222] text-xl font-bold">{currentUser?.user_name}</h2>
+                <h2 className="text-[#222] text-xl font-bold">{currentUser?.userName}</h2>
                 <span className="text-sm text-[#8898aa]">Vietnam</span>
               </div>
             </div>
             <div className="flex justify-center follow-btn">
-              <Button sx={{ textTransform: "none" }} variant="contained" className="bg-[#ff5e5e] mt-2">
-                Follow now
+              <Button sx={{ textTransform: "none", backgroundColor: "#ff5e5e" }} variant="contained" className="mt-2">
+                {t("app.profilePage.followBtn")}
               </Button>
             </div>
-            <h4 className="mt-4 mb-1 text-lg font-bold">About me</h4>
+            <h4 className="mt-4 mb-1 text-lg font-bold">{t("app.profilePage.aboutMeLabel")}</h4>
             <p className="text-sm text-[#8898aa]">{currentUser?.bio}</p>
 
             <div className="flex gap-2 items-center mt-2">
-              <span className="font-semibold text-sm">Mobile</span>
-              <span className="text-sm text-[#8898aa]">{currentUser?.phone_number}</span>
+              <span className="font-semibold text-sm">{t("app.profilePage.phoneNumberLabel")}</span>
+              <span className="text-sm text-[#8898aa]">{currentUser?.phoneNumber}</span>
             </div>
             <div className="flex gap-2 items-center">
               <span className="font-semibold text-sm">Email</span>
@@ -89,7 +93,7 @@ export default function Profile() {
           className="px-4 rounded-lg bg-white shadow-sm shadow-slate-500 py-4 h-fit"
         >
           <div className="flex flex-col">
-            <h2 className="font-bold py-5 text-xl text-[#222]">Personal Info</h2>
+            <h2 className="font-bold py-5 text-xl text-[#222]">{t("app.profilePage.title")}</h2>
           </div>
           <div className="flex profile-wrapper">
             <div className="flex-1 px-2">
@@ -97,7 +101,12 @@ export default function Profile() {
                 name="userName"
                 control={form.control}
                 render={({ field }) => (
-                  <TextField value={field.value} onChange={field.onChange} sx={{ width: "100%" }} label="First name" />
+                  <TextField
+                    value={field.value}
+                    onChange={field.onChange}
+                    sx={{ width: "100%" }}
+                    label={t("app.profilePage.userNameLabel")}
+                  />
                 )}
               />
             </div>
@@ -110,7 +119,7 @@ export default function Profile() {
                     value={field.value}
                     onChange={field.onChange}
                     sx={{ width: "100%" }}
-                    label="Phone number"
+                    label={t("app.profilePage.phoneNumberLabel")}
                   />
                 )}
               />
@@ -132,15 +141,19 @@ export default function Profile() {
                 control={form.control}
                 render={({ field }) => (
                   <Autocomplete
-                    value={field.value ? { label: "Male", value: true } : { label: "Female", value: false }}
+                    value={
+                      field.value
+                        ? { label: t("app.profilePage.genderMale"), value: true }
+                        : { label: t("app.profilePage.genderFemale"), value: false }
+                    }
                     disablePortal
                     options={[
-                      { label: "Male", value: true },
-                      { label: "Female", value: false },
+                      { label: t("app.profilePage.genderMale"), value: true },
+                      { label: t("app.profilePage.genderFemale"), value: false },
                     ]}
                     getOptionLabel={(option) => option.label || ""}
                     onChange={(_, value) => field.onChange(value?.value)}
-                    renderInput={(params) => <TextField {...params} label="Gender" />}
+                    renderInput={(params) => <TextField {...params} label={t("app.profilePage.genderLabel")} />}
                     sx={{ width: "100%" }}
                   />
                 )}
@@ -155,7 +168,7 @@ export default function Profile() {
               variant="contained"
               sx={{ width: 100, bgcolor: "#6366f1" }}
             >
-              Save
+              {t("app.profilePage.updateBtn")}
             </Button>
           </div>
         </form>

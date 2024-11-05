@@ -7,10 +7,12 @@ import validation from "./validation";
 import { useAppSelector } from "@/hooks/useStore";
 import { changePassword } from "@/api/authService";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function Password() {
   const { currentUser } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const form = useForm({
     defaultValues: {
@@ -46,7 +48,7 @@ export default function Password() {
           className="px-4 rounded-lg bg-white shadow-sm shadow-slate-500 py-4 h-full"
         >
           <div className="flex flex-col">
-            <h2 className="font-bold py-5 text-xl">Change your password</h2>
+            <h2 className="font-bold py-5 text-xl">{t("app.passwordPage.title")}</h2>
           </div>
 
           <div className="flex flex-col gap-4 mt-4 py-4">
@@ -62,7 +64,7 @@ export default function Password() {
                     onChange={field.onChange}
                     type="password"
                     sx={{ width: "100%" }}
-                    placeholder="Old password"
+                    placeholder={t("app.passwordPage.oldPasswordLabel")}
                   />
                 )}
               />
@@ -79,7 +81,7 @@ export default function Password() {
                     onChange={field.onChange}
                     type="password"
                     sx={{ width: "100%" }}
-                    placeholder="New password"
+                    placeholder={t("app.passwordPage.newPasswordLabel")}
                   />
                 )}
               />
@@ -96,7 +98,7 @@ export default function Password() {
                     onChange={field.onChange}
                     type="password"
                     sx={{ width: "100%" }}
-                    placeholder="Confirm password"
+                    placeholder={t("app.passwordPage.confirmPasswordLabel")}
                   />
                 )}
               />
@@ -110,7 +112,7 @@ export default function Password() {
               variant="contained"
               sx={{ width: 150, bgcolor: "#6366f1" }}
             >
-              Save
+              {t("app.passwordPage.saveBtn")}
             </Button>
           </div>
         </form>

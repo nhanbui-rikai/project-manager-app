@@ -30,11 +30,13 @@ import { getTaskById, updateTask } from "@/api/taskService";
 import { Controller, useForm } from "react-hook-form";
 import { useAppSelector } from "@/hooks/useStore";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export const DetailTaskContext = createContext<TaskContext>({});
 
 export default function CreateTaskPopup({ open, onClose }: { open: boolean; onClose: (value: any) => void }) {
   const { currentUser } = useAppSelector((state) => state.auth);
+  const { t } = useTranslation();
 
   const handleClose = () => {
     onClose(false);
@@ -76,7 +78,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
     },
   });
 
-  const { register, handleSubmit, control, watch } = taskForm;
+  const { watch } = taskForm;
 
   const states: TaskContext = {
     currentUser,
@@ -139,7 +141,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
             <div className="flex-1 p-2">
               <div className="mr-2 mb-3">
                 <div className="flex items-center text-[12px] mb-2">
-                  <span className="mr-2">Members</span>
+                  <span className="mr-2">{t("app.taskEditor.memberLabel")}</span>
                 </div>
                 <div className="relative flex items-center justify-start gap-2">
                   {members?.map((item: any, index) => (
@@ -191,7 +193,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                       onClick={() => setEditTitle(true)}
                       className="text-[16px] bg-gray-200 cursor-pointer py-2 pl-2 rounded"
                     >
-                      {watch("title") || "Title"}
+                      {watch("title") || t("app.taskEditor.titleLabel")}
                     </div>
                   )}
                 </div>
@@ -201,7 +203,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                   <SubjectIcon fontSize="small" />
                 </div>
                 <div className="flex-1 ml-4">
-                  <div className="text-[16px] mb-2">Describe</div>
+                  <div className="text-[16px] mb-2">{t("app.taskEditor.descriptionLabel")}</div>
                   {editDescription ? (
                     <div>
                       <Controller
@@ -235,7 +237,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                       onClick={() => setEditDescription(true)}
                       className="bg-gray-200 hover:bg-gray-300 cursor-pointer w-full text-[14px] mb-2 p-2 pb-6 rounded-[4px]"
                     >
-                      <div>{watch("description") || "Add more detailed description..."}</div>
+                      <div>{watch("description") || t("app.taskEditor.desciptionExample")}</div>
                     </div>
                   )}
                 </div>
@@ -243,7 +245,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
 
               <div className="flex p-2 gap-3">
                 <div className="flex flex-1 flex-col">
-                  <p>Estimated hours</p>
+                  <p>{t("app.taskEditor.estimatedHourLabel")}</p>
                   <Controller
                     name="estimatedHour"
                     control={taskForm.control}
@@ -263,7 +265,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                   />
                 </div>
                 <div className="flex flex-1 flex-col">
-                  <p>Actual hours</p>
+                  <p>{t("app.taskEditor.actualHourLabel")}</p>
 
                   <Controller
                     name="actualHour"
@@ -291,7 +293,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                 </div>
                 <div className="flex-1 ml-4">
                   <div className="flex justify-between">
-                    <div className="text-[16px] mb-2">Due Date</div>
+                    <div className="text-[16px] mb-2">{t("app.taskEditor.duedateLabel")}</div>
                   </div>
                   <div className="flex items-center text-[12px] mb-2">
                     <Controller
@@ -340,7 +342,7 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
               <div className="relative flex flex-col items-center mx-2 mt-16 mb-4">
                 <ButtonBoardCard
                   onHandleEvent={isJoined ? handleLeaveTask : handleJoinTask}
-                  nameBtn={isJoined ? "Leave" : "Join"}
+                  nameBtn={isJoined ? t("app.taskEditor.leaveBtn") : t("app.taskEditor.joinBtn")}
                 >
                   {isJoined ? (
                     <RemoveIcon className="ml-1 mr-2" fontSize="small" />
@@ -349,11 +351,11 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                   )}
                 </ButtonBoardCard>
 
-                <ButtonBoardCard nameBtn={"Members"}>
+                <ButtonBoardCard nameBtn={t("app.taskEditor.memberLabel")}>
                   <Person4OutlinedIcon className="ml-1 mr-2" fontSize="small" />
                 </ButtonBoardCard>
                 <ButtonBoardCard
-                  nameBtn={"Complete"}
+                  nameBtn={t("app.taskEditor.completedStatus")}
                   onHandleEvent={() => {
                     let isCompleted = watch("isCompleted");
                     taskForm.setValue("isCompleted", !isCompleted);
@@ -361,18 +363,16 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
                 >
                   <CheckBoxOutlinedIcon className="ml-1 mr-2" fontSize="small" />
                 </ButtonBoardCard>
-                <ButtonBoardCard nameBtn={"Day"}>
+                <ButtonBoardCard nameBtn={t("app.taskEditor.duedateLabel")}>
                   <AccessTimeOutlinedIcon className="ml-1 mr-2" fontSize="small" />
                 </ButtonBoardCard>
-                <ButtonBoardCard nameBtn={"Label"}>
-                  <LabelIcon className="ml-1 mr-2" fontSize="small" />
-                </ButtonBoardCard>
+
                 <Button
                   onClick={taskForm.handleSubmit(handleUpdateTask)}
                   variant="contained"
                   sx={{ py: 0.5, width: "100%", marginTop: 2, textTransform: "none" }}
                 >
-                  Save
+                  {t("app.taskEditor.saveBtn")}
                 </Button>
               </div>
             </div>

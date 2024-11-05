@@ -6,6 +6,42 @@
       "task": "Tasks",
       "setting": "Settings",
       "user": "Users"
+    },
+    "profilePage": {
+      "title": "Personal Infor",
+      "userNameLabel": "User Name",
+      "phoneNumberLabel":"Mobile",
+      "genderLabel": "Gender",
+      "aboutMeLabel": "About me",
+      "updateBtn": "Save",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "followBtn":"Follow"
+    },
+    "taskEditor": {
+      "memberLabel":"Members",
+      "titleLabel": "Title",
+      "descriptionLabel":"Describe",
+      "estimatedHourLabel":"Estimated hours",
+      "actualHourLabel":"Actual hours",
+      "duedateLabel": "Due date",
+      "leaveBtn":"Leave",
+      "joinBtn": "Join",
+      "completedStatus": "Completed",
+      "pendingStatus": "Pending",
+      "dayLabel" : "Day",
+      "desciptionExample": "Add more detailed description...",
+      "saveBtn": "Save",
+      "noResult": "No result"
+    },
+    "passwordPage": {
+      "title":"Change your password",
+      "oldPasswordLabel":"Old password",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "success":"Change password successfully",
+      "fail": "Change password unsuccessfully",
+      "saveBtn": "Save"
     }
   },
   "no_data": "No data",
