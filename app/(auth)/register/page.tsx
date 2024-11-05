@@ -38,7 +38,6 @@ export default function Register() {
         toast.success("Register successfully");
       })
       .catch((err) => {
-        console.log(err);
         toast.error(err.message);
       });
   };

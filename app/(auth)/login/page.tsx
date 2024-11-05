@@ -32,8 +32,8 @@ export default function Login() {
           login({
             id: userData?.id,
             email: userData?.email,
-            user_name: userData?.user_name,
-            phone_number: userData?.phone_number,
+            userName: userData?.user_name,
+            phoneNumber: userData?.phone_number,
             gender: userData?.gender,
             role: userData?.role,
             bio: userData?.bio,
@@ -89,6 +89,7 @@ export default function Login() {
                       name="password"
                       render={({ field }) => (
                         <TextField
+                          autoComplete="none"
                           value={field.value}
                           onChange={field.onChange}
                           type="password"

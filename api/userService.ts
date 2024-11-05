@@ -1,3 +1,5 @@
+import { User } from "@/constants/types";
+
 import db from "@/lib/firebase/firestore";
 import {
   collection,
@@ -60,7 +62,6 @@ export const getUserById = async (id: string) => {
     const q: Query<DocumentData> = query(collection(db, "cities"), where("capital", "==", true));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
     });
   } catch (error) {
@@ -71,3 +72,34 @@ export const getUserById = async (id: string) => {
 export const deleteUserById = async (id: string) => {};
 
 export const updateUserById = async (id: string) => {};
+
+export const searchUser = async (searchValue: string) => {
+  try {
+    const usersRef = collection(db, "users");
+    const querySnapshot = await getDocs(usersRef);
+
+    const matchedUsers: Array<User> = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (
+        (data.email && data.email.includes(searchValue)) ||
+        (data.user_name && data.user_name.includes(searchValue))
+      ) {
+        matchedUsers.push({
+          id: doc.id,
+          email: data?.email,
+          userName: data?.user_name,
+          phoneNumber: data?.phone_number,
+          gender: data?.gender,
+          bio: data?.bio,
+          role: data?.role,
+        });
+      }
+    });
+
+    return matchedUsers;
+  } catch (error) {
+    throw error;
+  }
+};
