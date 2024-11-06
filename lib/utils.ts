@@ -18,3 +18,27 @@ export const formatDate = (date: Date | string, type: "date" | "string"): string
   }
   return undefined;
 };
+
+export const getStringFromArrayData = (data: []) => {
+  if (data) {
+    return data.join(",");
+  }
+  return null;
+};
+
+export const sortedData = (data: any, orderBy: any, order: any) => {
+  return data
+    ? [...data].sort((a, b) => {
+        const aValue = a[orderBy];
+        const bValue = b[orderBy];
+
+        if (aValue < bValue) {
+          return order === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return order === "asc" ? 1 : -1;
+        }
+        return 0;
+      })
+    : [];
+};

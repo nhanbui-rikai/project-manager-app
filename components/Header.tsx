@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <>
       <header className={cn("min-h-12 p-2 shadow-md flex justify-between items-center bg-white rounded-md")}>
-        <div className={cn("flex gap-3 items-center justify-between")}>
+        <div className={cn("flex gap-3 items-center justify-between hover:cursor-pointer")}>
           <MenuIcon onClick={() => dispatch(toggleOpenSideBar())}></MenuIcon>
         </div>
 

@@ -3,33 +3,49 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
-import { TableContainer, TableRow } from "@mui/material";
+import { TableContainer, TableRow, TableSortLabel } from "@mui/material";
 
-interface TableProps {
-  column?: Array<{ id: string; name: string }> | null;
-  children?: React.ReactNode;
-  tableHeight?: string;
+interface TableColumn {
+  id: string;
+  name: string;
 }
 
-const TableData: React.FC<TableProps> = ({ column, children, tableHeight }) => {
+interface TableProps {
+  column?: TableColumn[] | null;
+  children?: React.ReactNode;
+  tableHeight?: string;
+  order?: "asc" | "desc";
+  orderBy?: string;
+  onRequestSort: (property: string) => void;
+}
+
+const TableData: React.FC<TableProps> = ({ column, children, tableHeight, order, orderBy, onRequestSort }) => {
+  const handleSort = (property: string) => {
+    onRequestSort(property);
+  };
+
   return (
-    <>
-      <TableContainer sx={{ maxHeight: tableHeight }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {column &&
-                column.map((col, index) => (
-                  <TableCell key={col.id} className="font-bold">
+    <TableContainer sx={{ maxHeight: tableHeight }}>
+      <Table stickyHeader aria-label="sticky table">
+        <TableHead>
+          <TableRow>
+            {column &&
+              column.map((col) => (
+                <TableCell key={col.id} className="font-bold">
+                  <TableSortLabel
+                    active={orderBy === col.id}
+                    direction={orderBy === col.id ? order : "asc"}
+                    onClick={() => handleSort(col.id)}
+                  >
                     {col.name}
-                  </TableCell>
-                ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>{children}</TableBody>
-        </Table>
-      </TableContainer>
-    </>
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>{children}</TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
