@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import RenderCondition from "@/components/RederCondition";
 import TableData from "@/components/Table/Table";
 import { formatDate, getStringFromArrayData, sortedData } from "@/lib/utils";
-import { TableCell, TablePagination, TableRow } from "@mui/material";
+import { TableCell, TablePagination, TableRow, Typography } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -11,11 +11,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import Button from "@/components/Button";
 import { toast } from "react-toastify";
-import { getAllProjects } from "@/api/projectService";
+import { getAllProjects, updateProject } from "@/api/projectService";
 import Text from "@/components/Text";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/useStore";
 import { setCurrentProjectData, setProjectData } from "@/lib/store/feature/project.slice";
+import CreateProjectModal from "@/components/CreateProjectModal/CreateProjectModal";
+import { UserService } from "@/api/userService";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import MessageDialog from "@/components/MessageDialog";
 
 interface Project {
   id: string;
@@ -26,14 +30,19 @@ interface Project {
   start_date: string;
   end_date: string;
 }
+type Option = { value: string; label: string };
 
 const ProjectPage = () => {
   const [data, setData] = React.useState<DocumentData[] | null>(null);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
+  const [removeLoading, setRemoveLoading] = React.useState(false);
   const [orderBy, setOrderBy] = React.useState<keyof Project>("project");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
+  const [openCreateProjectModal, setOpenCreateProjectModal] = React.useState(false);
+  const [memberOptions, setMemberOptions] = React.useState<Option[]>([]);
+  const [openRemoveModal, setOpenRemoveModal] = React.useState(false);
 
   const { t } = useTranslation();
   const router = useRouter();
@@ -51,11 +60,40 @@ const ProjectPage = () => {
     try {
       setLoading(true);
       const res = await getAllProjects();
+      const userRes = await UserService.getAllUsers();
+
+      if (userRes) {
+        const userArr = userRes.map((user) => {
+          return {
+            value: user.id || "",
+            label: user.user_name || "",
+          };
+        });
+        setMemberOptions(userArr);
+      }
       setData(res || null);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteProjects = async (id: string) => {
+    try {
+      setRemoveLoading(true);
+      const res = await updateProject(id, { deleted: true });
+      if (res) {
+        toast.success("Deleted successfully", {
+          position: "top-center",
+        });
+
+        fetchData();
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setRemoveLoading(false);
     }
   };
 
@@ -90,9 +128,33 @@ const ProjectPage = () => {
     router.push(`project/${id}`);
   };
 
+  const handleCloseCreateProjectModal = () => {
+    setOpenCreateProjectModal(false);
+  };
+
+  const handleRemoveProject = () => {};
+
+  const handleCloseModal = () => {
+    setOpenRemoveModal(false);
+  };
+
   const sortedProjects = sortedData(data, orderBy, order);
   return (
     <>
+      <CreateProjectModal
+        fetchData={fetchData}
+        memberOptions={memberOptions}
+        openCreateProjectModal={openCreateProjectModal}
+        handleCloseCreateProjectModal={handleCloseCreateProjectModal}
+      />
+      <div className="flex justify-between">
+        <Typography className="font-bold">Projects</Typography>
+        <Button
+          onClick={() => setOpenCreateProjectModal(true)}
+          name="Create Project"
+          className="bg-primary text-white"
+        />
+      </div>
       <RenderCondition condition={!loading}>
         <TableData
           column={column}
@@ -130,9 +192,13 @@ const ProjectPage = () => {
                       />
 
                       <Button
-                        onClick={() => {}}
+                        onClick={() => handleDeleteProjects(item.id)}
                         className="bg-transparent text-danger hover:text-danger/90"
-                        name={<DeleteIcon />}
+                        name={
+                          <>
+                            {loading && <LoadingSpinner />} <DeleteIcon />
+                          </>
+                        }
                       />
                     </div>
                   </TableCell>

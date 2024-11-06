@@ -1,6 +1,17 @@
 import db from "@/lib/firebase/firestore";
 import { formatDate } from "@/lib/utils";
-import { collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 
 interface User {
@@ -23,7 +34,8 @@ interface Project {
 export async function getAllProjects(): Promise<Project[]> {
   try {
     const projectsRef = collection(db, "projects");
-    const projectsSnapshot = await getDocs(projectsRef);
+    const q = query(projectsRef, where("deleted", "==", false));
+    const projectsSnapshot = await getDocs(q);
 
     const projects: any = await Promise.all(
       projectsSnapshot.docs.map(async (projectDoc) => {
@@ -228,15 +240,25 @@ export async function searchProjectsByName(name: string): Promise<Project[]> {
   }
 }
 
-export async function updateProject(id: string, updateData: any): Promise<void> {
+export async function updateProject(id: string, updateData: any) {
   try {
     const projectRef = doc(db, "projects", id);
 
     await updateDoc(projectRef, updateData);
 
-    console.log("Project updated successfully.");
+    return { success: true };
   } catch (error) {
-    console.error("Error updating project:", error);
     throw error;
+  }
+}
+
+export async function createProject(body: unknown) {
+  try {
+    await addDoc(collection(db, "projects"), body);
+    return {
+      success: true,
+    };
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : "An error occurred");
   }
 }
