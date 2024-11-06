@@ -26,15 +26,24 @@ import moment from "moment";
 import "./createTask.css";
 import AddMember from "../AddMember";
 import PopperClickAway from "../PopperClickAway";
-import { getTaskById, updateTask } from "@/api/taskService";
 import { Controller, useForm } from "react-hook-form";
 import { useAppSelector } from "@/hooks/useStore";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 export const DetailTaskContext = createContext<TaskContext>({});
 
-export default function CreateTaskPopup({ open, onClose }: { open: boolean; onClose: (value: any) => void }) {
+export default function CreateTaskPopup({
+  open,
+  onClose,
+  onSubmit,
+  data,
+}: {
+  open: boolean;
+  loading?: boolean;
+  data?: any;
+  onClose: (value: any) => void;
+  onSubmit?: (value: any) => void;
+}) {
   const { currentUser } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
 
@@ -65,16 +74,16 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
   const [addMemberPopper, setAddMemberPopper] = useState(false);
   const [datePicker, setDatePicker] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
-  const [members, setMembers] = useState<Array<User>>([]);
+  const [members, setMembers] = useState<Array<User>>(data?.assignedTo || []);
 
   const taskForm = useForm<TaskFormValues>({
     defaultValues: {
-      date: new Date(),
-      title: "",
-      description: "",
-      actualHour: 0,
-      estimatedHour: 0,
-      isCompleted: false,
+      date: data?.dueDate || new Date(),
+      title: data?.title || "",
+      description: data?.description || "",
+      actualHour: data?.actualHour || 0,
+      estimatedHour: data?.estimatedHour || 0,
+      isCompleted: data?.status === "pending",
     },
   });
 
@@ -87,35 +96,26 @@ export default function CreateTaskPopup({ open, onClose }: { open: boolean; onCl
   };
 
   const handleUpdateTask = (values: any) => {
-    updateTask("HT99exqzR8TxMX3fFxMr", values, members) // id sẽ lấy từ bên ngoài
-      .then((res) => {
-        toast.success("Update successfully");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+    if (onSubmit) {
+      return onSubmit({ values, members });
+    }
   };
 
   useEffect(() => {
-    getTaskById("HT99exqzR8TxMX3fFxMr") // id sẽ lấy từ bên ngoài
-      .then((res) => {
-        taskForm.reset({
-          title: res?.title,
-          isCompleted: res?.status === "pending",
-          description: res?.description,
-          estimatedHour: res?.estimatedHour,
-          actualHour: res?.actualHour,
-          date: res?.dueDate,
-        });
-        setMembers(res?.assignedTo || []);
-
-        let isExisted = res?.assignedTo?.find((user) => user.email === currentUser.email);
-        setIsJoined(isExisted ? true : false);
-      })
-      .catch((err) => {
-        toast.error(err.message);
+    if (data) {
+      setMembers(data.assignedTo);
+      const isExisted = data.assignedTo.find((user: any) => user.id === currentUser.id) ? true : false;
+      setIsJoined(isExisted);
+      taskForm.reset({
+        date: new Date(data.dueDate),
+        title: data.title || "",
+        description: data.description || "",
+        actualHour: data.actualHour || 0,
+        estimatedHour: data.estimatedHour || 0,
+        isCompleted: data.status === "pending",
       });
-  }, []);
+    }
+  }, [data, taskForm]);
 
   return (
     <DetailTaskContext.Provider value={states}>

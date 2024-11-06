@@ -7,75 +7,8 @@ import { Pagination } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const data = [
-  {
-    id: "1",
-    title: "Task 1",
-    actual_hours: 1,
-    assigned_to: "john, john 1",
-    description: "This is description",
-    due_date: new Date(),
-    estimate_hours: 1,
-    status: "pending",
-    created_at: new Date(),
-    updated_at: new Date(),
-    processing: 100,
-  },
-  {
-    id: "2",
-    title: "Task 1",
-    actual_hours: 1,
-    assigned_to: "john, john 1",
-    description: "This is description",
-    due_date: new Date(),
-    estimate_hours: 1,
-    status: "pending",
-    created_at: new Date(),
-    updated_at: new Date(),
-    processing: 20,
-  },
-  {
-    id: "3",
-    title: "Task 1",
-    actual_hours: 1,
-    assigned_to: "john, john 1",
-    description: "This is description",
-    due_date: new Date(),
-    estimate_hours: 1,
-    status: "pending",
-    created_at: new Date(),
-    updated_at: new Date(),
-    processing: 70,
-  },
-  {
-    id: "4",
-    title: "Task 1",
-    actual_hours: 1,
-    assigned_to: "john, john 1",
-    description: "This is description",
-    due_date: new Date(),
-    estimate_hours: 1,
-    status: "pending",
-    created_at: new Date(),
-    updated_at: new Date(),
-    processing: 90,
-  },
-  {
-    id: "5",
-    title: "Task 1",
-    actual_hours: 1,
-    assigned_to: "john, john 1",
-    description: "This is description",
-    due_date: new Date(),
-    estimate_hours: 1,
-    status: "pending",
-    created_at: new Date(),
-    updated_at: new Date(),
-    processing: 0,
-  },
-];
-
 const TaskPage = () => {
+  const data: any[] = [];
   const [page, setPage] = React.useState(1);
   const [task, setTask] = React.useState();
   const [loading, setLoading] = React.useState(false);

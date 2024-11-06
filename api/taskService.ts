@@ -1,6 +1,6 @@
 import { TaskData, User } from "@/constants/types";
 import db from "@/lib/firebase/firestore";
-import { doc, DocumentReference, getDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, DocumentReference, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 
 export async function getTaskById(id: string) {
   try {
@@ -74,6 +74,44 @@ export async function updateTask(id: string, taskData: TaskData, members: Array<
     });
 
     return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createTask(taskData: TaskData, members: Array<User>, projectId: string, taskIds: string[]) {
+  try {
+    const refArr: Array<DocumentReference> = members.map((mem) => {
+      if (!mem.id) {
+        throw new Error("User ID is undefined");
+      }
+      return doc(db, "users", mem.id);
+    });
+
+    const projectRef = doc(db, "projects", projectId);
+
+    const newTask = await addDoc(collection(db, "tasks"), {
+      title: taskData.title,
+      description: taskData.description,
+      due_date: Timestamp.fromDate(taskData.dueDate || new Date()),
+      estimate_hours: taskData.estimatedHour,
+      actual_hours: taskData.actualHour,
+      status: "pending",
+      created_at: Timestamp.now(),
+      updated_at: Timestamp.now(),
+      assigned_to: refArr,
+      project_id: projectRef,
+    });
+
+    taskIds.push(newTask.id);
+    const tasksRef: Array<DocumentReference> = taskIds.map((id) => {
+      return doc(db, "tasks", id);
+    });
+
+    await updateDoc(projectRef, {
+      tasks: tasksRef,
+    });
+    return newTask.id;
   } catch (error) {
     throw error;
   }
