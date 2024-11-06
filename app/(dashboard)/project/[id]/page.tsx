@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TableCell, TableRow, Typography, Button } from "@mui/material";
 import TextInput from "@/components/TextInput";
@@ -7,15 +7,18 @@ import DateInput from "@/components/DateInput";
 import TextArea from "@/components/TextArea";
 import RenderCondition from "@/components/RederCondition";
 import { useTranslation } from "react-i18next";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import TableData from "@/components/Table/Table";
 import Text from "@/components/Text";
-import { cn, formatDate, getStringFromArrayData, sortedData } from "@/lib/utils";
+import { cn, formatDate, sortedData } from "@/lib/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ButtonApp from "@/components/Button";
 import CreateTaskPopup from "@/components/CreateTask";
 import { useAppSelector } from "@/hooks/useStore";
+import { createTask, getTaskById, updateTask } from "@/api/taskService";
+import { toast } from "react-toastify";
+import { TaskData, User } from "@/constants/types";
 
 interface FormData {
   name: string;
@@ -59,11 +62,11 @@ const DetailProjectPage: React.FC = () => {
   const [isEdit, setIsEdit] = React.useState(false);
   const [taskData, setTaskData] = React.useState<TaskProps[] | null>(null);
   const [createPopup, setCreatePopup] = React.useState<boolean>(false);
+  const [editTask, setEditTask] = useState<any>(null);
 
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
-  const { currentProjectData, projectData } = useAppSelector((state) => state.project);
-  const router = useRouter();
+  const { currentProjectData } = useAppSelector((state) => state.project);
 
   const {
     register,
@@ -97,12 +100,9 @@ const DetailProjectPage: React.FC = () => {
     { id: "description", name: "Description" },
     { id: "category", name: "Category" },
     { id: "status", name: "Status" },
-    { id: "assigned_to", name: "Members" },
     { id: "actual_hours", name: "Actual Hours" },
     { id: "estimate_hours", name: "Estimate Hours" },
     { id: "due_date", name: "Due Date" },
-    { id: "created_at", name: "Created At" },
-    { id: "updated_at", name: "Updated At" },
     { id: "action", name: "Action" },
   ];
 
@@ -110,6 +110,68 @@ const DetailProjectPage: React.FC = () => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+  };
+
+  const handleCreateTask = ({ values, members }: { values: any; members: any }) => {
+    const projectId = params.id;
+    const taskIds = currentProjectData?.tasks.map((task) => task.id) || [];
+    createTask(values, members, projectId, taskIds)
+      .then((res) => {
+        toast.success("Create Task successfully");
+
+        setTaskData((prev: any) => {
+          return [
+            ...prev,
+            {
+              id: res,
+              title: values.title,
+              description: values.description,
+              status: "pending",
+              actual_hours: values.actualHour,
+              estimate_hours: values.estimatedHour,
+              due_date: new Date(),
+              created_at: new Date(),
+              updated_at: new Date(),
+              members,
+            },
+          ];
+        });
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  const handleUpdateTask = ({ values, members }: { values: TaskData; members: Array<User> }) => {
+    updateTask(editTask.id, values, members)
+      .then((res) => {
+        toast.success("Update tag successfully");
+        setEditTask(null);
+        setTaskData((prev: any) => {
+          if (!prev) return [];
+          const newState = prev.map((task: any) => {
+            if (task.id === editTask.id) {
+              return {
+                ...task,
+                title: values?.title,
+                description: values?.description,
+                status: values?.status,
+                actual_hours: values?.actualHour,
+                estimate_hours: values?.estimatedHour,
+                due_date: values?.dueDate,
+                created_at: values?.createdAt,
+                updated_at: new Date(),
+              };
+            }
+            return task;
+          });
+
+          return newState;
+        });
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   const sortedProjects = sortedData(taskData, orderBy, order);
@@ -120,39 +182,40 @@ const DetailProjectPage: React.FC = () => {
         onClose={(value) => {
           setCreatePopup(value);
         }}
+        onSubmit={handleCreateTask}
       />
-      <div className="flex justify-between items-center mb-5">
-        <Typography className="p-3 font-bold text-xl">Detail Project</Typography>
-        <div>
-          <RenderCondition condition={isEdit}>
-            <div className="flex gap-3">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={`${!isEdit && "cursor-not-allowed"}`}
-              >
-                Submit
-              </Button>
-              <Button
-                onClick={() => setIsEdit(false)}
-                variant="contained"
-                color="error"
-                className={`${!isEdit && "cursor-not-allowed"}`}
-              >
-                Cancel
-              </Button>
-            </div>
-          </RenderCondition>
-          <RenderCondition condition={!isEdit}>
-            <Button variant="contained" color="secondary" onClick={() => setIsEdit(true)}>
-              Edit
-            </Button>
-          </RenderCondition>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-between items-center mb-5">
+          <Typography className="p-3 font-bold text-xl">Detail Project</Typography>
+          <div>
+            <RenderCondition condition={isEdit}>
+              <div className="flex gap-3">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={`${!isEdit && "cursor-not-allowed"}`}
+                >
+                  Submit
+                </Button>
+                <Button
+                  onClick={() => setIsEdit(false)}
+                  variant="contained"
+                  color="error"
+                  className={`${!isEdit && "cursor-not-allowed"}`}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </RenderCondition>
+            <RenderCondition condition={!isEdit}>
+              <Button variant="contained" color="secondary" onClick={() => setIsEdit(true)}>
+                Edit
+              </Button>
+            </RenderCondition>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 gap-5">
           <div className="col-span-1">
             <TextInput
@@ -238,28 +301,33 @@ const DetailProjectPage: React.FC = () => {
                       <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
                     </TableCell>
                     <TableCell>
-                      <Text maxWidth={100} maxLength={100} text={item.category || "-"} />
+                      <Text maxWidth={100} maxLength={100} text={item.title || "-"} />
                     </TableCell>
                     <TableCell>
                       <Text maxWidth={100} maxLength={100} text={item.status || "-"} />
                     </TableCell>
+
                     <TableCell>
-                      <Text maxWidth={100} maxLength={100} text={getStringFromArrayData(item.members) || "-"} />
-                    </TableCell>
-                    <TableCell>
-                      <Text maxWidth={100} maxLength={100} text={item.actual_hours || "-"} />
+                      <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
                     </TableCell>
                     <TableCell>
                       <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
                     </TableCell>
 
                     <TableCell>{formatDate(item.due_date, "string") || "-"}</TableCell>
-                    <TableCell>{formatDate(item.created_at, "string") || "-"}</TableCell>
-                    <TableCell>{formatDate(item.updated_at, "string") || "-"}</TableCell>
                     <TableCell>
                       <div className="flex gap-2 w-full h-full">
                         <ButtonApp
                           disabled={!isEdit}
+                          onClick={() => {
+                            getTaskById(item.id)
+                              .then((res) => {
+                                setEditTask(res);
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}
                           name={<EditNoteIcon />}
                           className={cn(
                             "bg-transparent text-secondary hover:text-secondary/90",
@@ -287,6 +355,17 @@ const DetailProjectPage: React.FC = () => {
           </RenderCondition>
         </div>
       </form>
+
+      <CreateTaskPopup // for update
+        data={editTask}
+        open={editTask !== null}
+        onClose={(value) => {
+          setEditTask(null);
+        }}
+        onSubmit={(values) => {
+          handleUpdateTask(values);
+        }}
+      />
     </>
   );
 };

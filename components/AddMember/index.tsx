@@ -7,9 +7,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import MemberItem from "./MemberItem";
 import useDebounce from "@/hooks/useDebounce";
-import { searchUser } from "@/api/userService";
 import { DetailTaskContext } from "../CreateTask";
 import { toast } from "react-toastify";
+import { UserService } from "@/api/userService";
 
 export default function AddMember({ onClosePopper }: { onClosePopper?: () => void }) {
   const [isSearching, setIsSearching] = useState(false);
@@ -48,11 +48,11 @@ export default function AddMember({ onClosePopper }: { onClosePopper?: () => voi
 
     const fetchApi = async () => {
       setIsSearching(true);
-      searchUser(debounceValue.trim())
-        .then((res) => {
+      UserService.searchUser(debounceValue.trim())
+        .then((res: any) => {
           setSearchResult(res);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           toast.error(err.message);
         });
     };

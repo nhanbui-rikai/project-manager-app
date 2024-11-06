@@ -30,12 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StoreProvider>
-        {/* <AuthContext> */}
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} />
-          <div>{children}</div>
-        </body>
-        {/* </AuthContext> */}
+        <AuthContext>
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} />
+            <div>{children}</div>
+          </body>
+        </AuthContext>
       </StoreProvider>
     </html>
   );
