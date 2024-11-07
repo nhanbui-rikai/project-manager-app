@@ -14,7 +14,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 const LandingLayout = ({ children }: { children: React.ReactNode }) => {
   const { isOpenOrClose } = useAppSelector((state) => state.app);
   return (
-    <main className="w-full h-full bg-slate-200/90">
+    <main className="w-full h-full bg-slate-200">
       {/* Main content */}
       <ExpandSideBar>
         <div className="w-full">

@@ -117,7 +117,7 @@ const DetailProjectPage: React.FC = () => {
     const taskIds = currentProjectData?.tasks.map((task) => task.id) || [];
     createTask(values, members, projectId, taskIds)
       .then((res) => {
-        toast.success("Create Task successfully");
+        toast.success(t("app.createTask.toastSuccess"));
 
         setTaskData((prev: any) => {
           return [
@@ -138,14 +138,14 @@ const DetailProjectPage: React.FC = () => {
         });
       })
       .catch((err) => {
-        toast.error(err.message);
+        toast.error(t("app.createTask.toastFail"));
       });
   };
 
   const handleUpdateTask = ({ values, members }: { values: TaskData; members: Array<User> }) => {
     updateTask(editTask.id, values, members)
       .then((res) => {
-        toast.success("Update tag successfully");
+        toast.success(t("app.updateTask.toastSuccess"));
         setEditTask(null);
         setTaskData((prev: any) => {
           if (!prev) return [];
@@ -170,7 +170,7 @@ const DetailProjectPage: React.FC = () => {
         });
       })
       .catch((err) => {
-        toast.error(err.message);
+        toast.error(t("app.updateTask.toastFail"));
       });
   };
 

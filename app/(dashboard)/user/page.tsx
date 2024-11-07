@@ -33,12 +33,12 @@ export default function UserPage() {
   const { t } = useTranslation();
 
   const column = [
-    { id: "id", name: "ID" },
-    { id: "email", name: "Email" },
-    { id: "role", name: "Role" },
-    { id: "created_at", name: "Created At" },
-    { id: "updated_at", name: "Updated At" },
-    { id: "action", name: "Action" },
+    { id: "id", name: t("userPage.idLabel") },
+    { id: "email", name: t("userPage.emailLabel") },
+    { id: "role", name: t("userPage.roleLabel") },
+    { id: "created_at", name: t("userPage.createdAtLabel") },
+    { id: "updated_at", name: t("userPage.updatedAtLabel") },
+    { id: "action", name: t("userPage.actionLabel") },
   ];
 
   const rawCol = column.slice(0, -1);
@@ -212,6 +212,7 @@ export default function UserPage() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage={t("userPage.rowLabel")}
           />
         )}
       </RenderCondition>
