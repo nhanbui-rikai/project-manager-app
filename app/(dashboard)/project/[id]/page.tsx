@@ -41,7 +41,6 @@ interface TaskProps {
   id: string;
   title: string;
   description: string;
-  category: string;
   status: string;
   assigned_to: string;
   actual_hours: string;
@@ -98,7 +97,6 @@ const DetailProjectPage: React.FC = () => {
     { id: "id", name: "ID" },
     { id: "title", name: "Title" },
     { id: "description", name: "Description" },
-    { id: "category", name: "Category" },
     { id: "status", name: "Status" },
     { id: "actual_hours", name: "Actual Hours" },
     { id: "estimate_hours", name: "Estimate Hours" },

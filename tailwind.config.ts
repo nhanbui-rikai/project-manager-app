@@ -29,6 +29,9 @@ const config: Config = {
         authScreen: "calc(100vh - 32px)",
         main: "calc(100vh - 120px)",
       },
+      width: {
+        "main-modal": "700px",
+      },
       flex: {
         "2": "2 2 0%",
         "3": "3 3 0%",

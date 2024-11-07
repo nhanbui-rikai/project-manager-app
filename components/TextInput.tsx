@@ -24,7 +24,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       id,
       variant = "standard",
       icon = <AccountCircle />,
-      showIcon = true,
+      showIcon = false,
       error = false,
       helperText,
       type = "text",
