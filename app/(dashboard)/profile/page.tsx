@@ -24,7 +24,7 @@ export default function Profile() {
     setIsLoading(true);
     updateProfile({ userName, bio, gender, phoneNumber, id: currentUser.id })
       .then((res) => {
-        toast.success("Update profile successfully");
+        toast.success(t("app.profile.toastSuccess"));
         dispatch(
           updateUser({
             user_name: userName,
@@ -37,7 +37,7 @@ export default function Profile() {
         );
       })
       .catch((err) => {
-        toast.error("Update unsuccessfully");
+        toast.error(t("app.profile.toastFail"));
       })
       .finally(() => setIsLoading(false));
   };

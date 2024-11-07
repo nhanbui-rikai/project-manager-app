@@ -29,11 +29,16 @@ const MessageBox: React.FC<MessageBoxProps> = ({ children, content, title, open,
   return (
     <React.Fragment>
       <Dialog
+        sx={{
+          "& .MuiDialog-paper": {
+            width: 400,
+          },
+        }}
+        tabIndex={-1}
         open={open}
         TransitionComponent={Transition}
         keepMounted
         onClose={onClose}
-        aria-describedby="alert-dialog-slide-description"
       >
         {Boolean(title) && <DialogTitle>{title}</DialogTitle>}
         {Boolean(content) && (

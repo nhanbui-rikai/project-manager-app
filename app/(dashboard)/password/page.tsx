@@ -29,10 +29,12 @@ export default function Password() {
     setIsLoading(true);
     changePassword({ newPassword, currentPassword: oldPassword, userId: currentUser.id })
       .then((res) => {
-        toast.success("Change password successfully");
+        toast.success(t("app.passwordPage.success"));
       })
       .catch((err) => {
-        toast.error(err.message);
+        let message = err.message;
+        if (message === "Current password is incorrect") message = t("app.passwordPage.passwordIncorrect");
+        toast.error(message);
       })
       .finally(() => {
         form.reset();

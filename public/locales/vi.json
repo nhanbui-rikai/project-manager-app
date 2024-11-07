@@ -16,7 +16,9 @@
       "updateBtn": "Lưu",
       "genderMale": "Nam",
       "genderFemale": "Nữ",
-      "followBtn": "Theo dõi"
+      "followBtn": "Theo dõi",
+      "toastSuccess": "Cập nhật thông tin cá nhân thành công",
+      "toastFail": "Cập nhật thông tin cá nhân thất bại"
     },
     "taskEditor": {
       "memberLabel": "Thành viên",
@@ -41,11 +43,41 @@
       "confirmPasswordLabel": "Xác nhận lại mật khẩu",
       "success": "Thay đổi mật khẩu thành công",
       "fail": "Thay đổi mật khẩu thất bại",
+      "passwordIncorrect":"Mật khẩu cũ không chính xác",
       "saveBtn": "Lưu"
-    }
+    },
+    "login":{
+      "emailLabel":"Email",
+      "passwordLabel":"Mật khẩu",
+      "toastSuccess": "Đăng nhập thành công",
+      "toastFail": "Đăng nhập thất bại"
+    },
+    "register": {
+      "toastSuccess": "Đăng ký tài khoản thành công"
+    },
+    "createTask": {
+      "toastSuccess": "Tạo task thành công"
+    },
+    "updateTask": {
+      "toastSuccess":"Cập nhật task thành công"
+    },
+    "registerLabel": "Đăng ký",
+    "loginLabel":"Đăng nhập",
+    "dontHaveAccount":"Bạn không có tài khoản?",
+    "haveAccount":"Already have an account yet",
+    "now":"ngay bây giờ"
   },
   "no_data": "Không có dữ liệu",
   "message": {
     "delete_success": "Xoá thành công"
+  },
+  "userPage":{
+    "idLabel":"Id",
+    "emailLabel":"Email",
+    "roleLabel":"Quyền",
+    "createdLabel":"Ngày tạo",
+    "updatedAtLabel":"Ngày cập nhật gần nhất",
+    "actionLabel": "Chức năng",
+    "rowLabel": "Số hàng trên 1 trang"
   }
 }

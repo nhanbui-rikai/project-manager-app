@@ -16,7 +16,9 @@
       "updateBtn": "Save",
       "genderMale": "Male",
       "genderFemale": "Female",
-      "followBtn":"Follow"
+      "followBtn":"Follow",
+      "toastSuccess": "Update profile successfully",
+      "toastFail": "Update profile unsuccessfully"
     },
     "taskEditor": {
       "memberLabel":"Members",
@@ -41,12 +43,46 @@
       "confirmPasswordLabel": "Confirm password",
       "success":"Change password successfully",
       "fail": "Change password unsuccessfully",
+      "passwordIncorrect":"Current password is incorrect",
       "saveBtn": "Save"
-    }
+    },
+    "login":{
+      "emailLabel":"Email",
+      "passwordLabel":"Password",
+      "toastSuccess": "Login successfully",
+      "toastFail": "Login unsuccessfully"
+    },
+    "register": {
+      "toastSuccess": "Register successfully",
+      "toastFail": "Register unsuccessfully"
+    },
+    "createTask": {
+      "toastSuccess": "Create task successfully",
+      "toastFail": "Create task unsuccessfully"
+    },
+    "updateTask": {
+      "toastSuccess":"Update task successfully",
+      "toastFail": "Update  task unsuccessfully"
+    },
+    "registerLabel": "Register",
+    "loginLabel":"Login",
+    "dontHaveAccount":"Don't have account?",
+    "haveAccount":"Already have an account yet",
+    "now":"now"
   },
   "no_data": "No data",
   "message": {
     "delete_success": "Delete Successfully",
     "delete_err": "Delete Failure"
+  },
+  "userPage":{
+    "idLabel":"Id",
+    "emailLabel":"Email",
+    "roleLabel":"Role",
+    "createdLabel":"Created At",
+    "updatedAtLabel":"Updated At",
+    "actionLabel": "Actions",
+     "rowLabel": "Rows per page"
   }
+ 
 }

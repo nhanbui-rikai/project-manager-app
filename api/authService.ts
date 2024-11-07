@@ -72,7 +72,7 @@ export async function changePassword({ currentPassword, newPassword, userId }: C
       const user = docSnap.data();
 
       if (user.password !== currentPassword) {
-        throw new Error("Current password is not correct");
+        throw new Error("Current password is incorrect");
       }
       await updateDoc(userDocRef, {
         password: newPassword,
