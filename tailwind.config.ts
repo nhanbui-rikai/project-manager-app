@@ -25,6 +25,9 @@ const config: Config = {
         pc: "1024px",
         "large-pc": "1280px",
       },
+      width: {
+        main: "1024px",
+      },
       height: {
         authScreen: "calc(100vh - 32px)",
         main: "calc(100vh - 120px)",

@@ -1,7 +1,7 @@
 import { User } from "@/constants/types";
 
 import db from "@/lib/firebase/firestore";
-import { collection, deleteDoc, doc, getDocs, Timestamp } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, Timestamp, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 interface UserServiceProps {
@@ -64,7 +64,17 @@ export class UserService {
     }
   }
 
-  static async updateUser() {}
+  static async updateUser(id: string, updateData: any) {
+    try {
+      const userRef = doc(db, "users", id);
+
+      await updateDoc(userRef, updateData);
+
+      return { success: true };
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "An error occurred");
+    }
+  }
 
   static async searchUser(searchValue: string) {
     try {

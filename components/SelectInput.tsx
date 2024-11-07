@@ -16,6 +16,7 @@ interface SelectorInputProps {
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   value?: string | number;
+  disabled?: boolean;
 }
 
 const SelectorInput = forwardRef<HTMLDivElement, SelectorInputProps>(
@@ -31,12 +32,13 @@ const SelectorInput = forwardRef<HTMLDivElement, SelectorInputProps>(
       options,
       className,
       value,
+      disabled = false,
       ...props
     },
     ref,
   ) => {
     return (
-      <FormControl className="w-full" variant={variant} error={error} ref={ref}>
+      <FormControl className="w-full" variant={variant} error={error} ref={ref} disabled={disabled}>
         <Box className="w-full" sx={{ display: "flex", alignItems: "center" }}>
           {showIcon && <span style={{ marginRight: "8px", marginBottom: "4px" }}>{icon}</span>}
           <InputLabel id={`${id}-label`}>{label}</InputLabel>

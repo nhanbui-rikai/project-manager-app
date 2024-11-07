@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Button from "@/components/Button";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { formatDate } from "@/lib/utils";
+import { formatDate, sortedData } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserService } from "@/api/userService";
 import { DocumentData } from "firebase/firestore";
@@ -18,6 +18,8 @@ import { useTranslation } from "react-i18next";
 import MessageBox from "@/components/Dialog";
 import { toast } from "react-toastify";
 import MessageDialog from "@/components/MessageDialog";
+import { useAppDispatch } from "@/hooks/useStore";
+import { setSelectedUser } from "@/lib/store/feature/app.slice";
 
 export default function UserPage() {
   const [user, setUser] = React.useState<DocumentData[] | null>(null);
@@ -30,7 +32,9 @@ export default function UserPage() {
   const [openDetailModal, setOpenDetailModal] = React.useState(false);
   const [selectUser, setSelectUser] = React.useState<any | null>(null);
   const [openDeleteUserModal, setOpenDeleteUserModal] = React.useState(false);
+
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const column = [
     { id: "id", name: t("userPage.idLabel") },
@@ -85,6 +89,17 @@ export default function UserPage() {
     setPage(0);
   };
 
+  const handleClickEditUser = (id: string) => {
+    const selectedUser = sortedUsers.find((user) => user.id === id);
+    const dispatchUser = {
+      ...selectedUser,
+      updated_at: formatDate(selectedUser.updated_at, "string"),
+      created_at: formatDate(selectedUser.created_at, "string"),
+    };
+    dispatch(setSelectedUser(dispatchUser));
+    router.push(`/user/${id}`);
+  };
+
   const deleteUser = async () => {
     setDeleteLoading(true);
     try {
@@ -105,21 +120,7 @@ export default function UserPage() {
     setOrderBy(property);
   };
 
-  const sortedUsers = user
-    ? [...user].sort((a, b) => {
-        const aValue = a[orderBy];
-        const bValue = b[orderBy];
-
-        if (aValue < bValue) {
-          return order === "asc" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return order === "asc" ? 1 : -1;
-        }
-        return 0;
-      })
-    : [];
-
+  const sortedUsers = sortedData(user, orderBy, order);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }} className="border-none shadow-none">
       <MessageDialog
@@ -184,7 +185,7 @@ export default function UserPage() {
                         name={<RemoveRedEyeIcon />}
                       />
                       <Button
-                        onClick={() => router.push("/profile")}
+                        onClick={() => handleClickEditUser(user.id)}
                         name={<EditNoteIcon />}
                         className="bg-transparent text-secondary hover:text-secondary/90"
                       />
