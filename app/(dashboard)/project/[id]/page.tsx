@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "next/navigation";
 import TableData from "@/components/Table/Table";
 import Text from "@/components/Text";
-import { cn, formatDate, sortedData } from "@/lib/utils";
+import { cn, formatDate, getTableId, sortedData } from "@/lib/utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ButtonApp from "@/components/Button";
@@ -73,7 +73,7 @@ const DetailProjectPage: React.FC = () => {
   const [taskData, setTaskData] = React.useState<TaskProps[] | null>(null);
   const [createPopup, setCreatePopup] = React.useState<boolean>(false);
   const [editTask, setEditTask] = useState<any>(null);
-
+  const [loading, setLoading] = React.useState(false);
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const { currentProjectData } = useAppSelector((state) => state.project);
@@ -223,6 +223,16 @@ const DetailProjectPage: React.FC = () => {
   };
 
   const sortedProjects = sortedData(taskData, orderBy, order);
+
+  const handleEditTaskById = (id: string) => {
+    getTaskById(id)
+      .then((res) => {
+        setEditTask(res);
+      })
+      .catch((error) => {
+        toast.error(error instanceof Error ? error.message : "An error occurred");
+      });
+  };
   return (
     <>
       <CreateTaskPopup
@@ -325,6 +335,77 @@ const DetailProjectPage: React.FC = () => {
           </div>
         </div>
       </form>
+      <div className="min-h-96 my-5">
+        <Button
+          className={`${!isEdit && "cursor-not-allowed"}`}
+          disabled={!isEdit}
+          variant="contained"
+          color="primary"
+          onClick={() => setCreatePopup(true)}
+        >
+          Add Task
+        </Button>
+
+        <TableData
+          column={column}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={(property) => handleRequestSort(property as keyof TaskProps)}
+          tableHeight="calc(100vh - 200px)"
+        >
+          <RenderCondition condition={Boolean(taskData)}>
+            {sortedProjects.length > 0 &&
+              sortedProjects.map((item, index) => (
+                <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={item.id}>
+                  <TableCell className="max-w-table-cell">{getTableId(page, rowsPerPage, index)}</TableCell>
+                  <TableCell className="max-w-table-cell">{item.title}</TableCell>
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.status || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
+                  </TableCell>
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">{formatDate(item.due_date, "string") || "-"}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2 w-full h-full">
+                      <ButtonApp
+                        disabled={!isEdit}
+                        onClick={() => handleEditTaskById(item.id)}
+                        name={<EditNoteIcon />}
+                        className={cn(
+                          "bg-transparent text-secondary hover:text-secondary/90",
+                          !isEdit && "cursor-not-allowed",
+                        )}
+                      />
+
+                      <ButtonApp
+                        disabled={!isEdit}
+                        onClick={() => {}}
+                        className={cn(
+                          "bg-transparent text-danger hover:text-danger/90",
+                          !isEdit && "cursor-not-allowed",
+                        )}
+                        name={<DeleteIcon />}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </RenderCondition>
+        </TableData>
+        <RenderCondition condition={!Boolean(taskData)}>
+          <div className="text-center w-full py-2">{t("app.no_data")}</div>
+        </RenderCondition>
+      </div>
 
       <div className="min-h-96 my-5">
         <Button

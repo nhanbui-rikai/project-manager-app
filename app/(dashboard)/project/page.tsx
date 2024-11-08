@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import RenderCondition from "@/components/RederCondition";
 import TableData from "@/components/Table/Table";
-import { formatDate, getStringFromArrayData, sortedData } from "@/lib/utils";
+import { formatDate, getStringFromArrayData, getTableId, sortedData } from "@/lib/utils";
 import { Box, Modal, TableCell, TablePagination, TableRow, Typography } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ import CreateProjectModal from "@/components/CreateProjectModal/CreateProjectMod
 import { UserService } from "@/api/userService";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MessageDialog from "@/components/MessageDialog";
+import { setAppLoading } from "@/lib/store/feature/app.slice";
 
 interface Project {
   id: string;
@@ -64,6 +65,7 @@ const ProjectPage = () => {
   const fetchData = async (): Promise<void> => {
     try {
       setLoading(true);
+      dispatch(setAppLoading(true));
       const res = await getAllProjects();
       const userRes = await UserService.getAllUsers();
 
@@ -81,6 +83,7 @@ const ProjectPage = () => {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setLoading(false);
+      dispatch(setAppLoading(false));
     }
   };
 
@@ -185,7 +188,7 @@ const ProjectPage = () => {
             {sortedProjects.length > 0 &&
               sortedProjects.map((item, index) => (
                 <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={item.id}>
-                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                  <TableCell>{getTableId(page, rowsPerPage, index)}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>
                     <Text maxWidth={100} maxLength={20} text={item.description || "-"} />

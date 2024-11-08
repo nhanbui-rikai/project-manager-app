@@ -29,7 +29,7 @@ export const AppSlice = createSlice({
       i18n.changeLanguage(action.payload);
     },
 
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setAppLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
 
@@ -39,5 +39,5 @@ export const AppSlice = createSlice({
   },
 });
 
-export const { toggleOpenSideBar, setLanguage, setSelectedUser } = AppSlice.actions;
+export const { toggleOpenSideBar, setLanguage, setSelectedUser, setAppLoading } = AppSlice.actions;
 export default AppSlice.reducer;

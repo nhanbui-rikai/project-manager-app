@@ -3,14 +3,19 @@ import React from "react";
 
 interface LoadingSpinnerProps {
   className?: string;
+  size?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ className }) => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ className, size = "4" }) => {
   return (
     <>
       <svg
         aria-hidden="true"
-        className={cn("w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600", className)}
+        className={cn(
+          "me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
+          `w-${size} h-${size}`,
+          className,
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

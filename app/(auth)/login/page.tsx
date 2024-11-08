@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Button, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { setAppLoading } from "@/lib/store/feature/app.slice";
 
 export default function Login() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function Login() {
   const handleLogin = ({ email, password }: { email: string; password: string }) => {
     loginByEmail({ email, password })
       .then((res) => {
+        dispatch(setAppLoading(true));
         if (!res) throw new Error("Not found user");
         const userData: any = { ...res };
         delete userData.password;
@@ -39,12 +41,15 @@ export default function Login() {
             bio: userData?.bio,
           }),
         );
-        router.push("/");
+        router.push("/project");
         toast.success("Login successfully");
       })
       .catch((err) => {
         form.reset();
         toast.error("Email or password incorrect");
+      })
+      .finally(() => {
+        dispatch(setAppLoading(false));
       });
   };
 

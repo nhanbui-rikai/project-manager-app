@@ -88,6 +88,10 @@ export const decryptData = (ciphertext: string): any => {
   }
 };
 
+export const getTableId = (page: any, rowsPerPage: any, index: any) => {
+  return page * rowsPerPage + index + 1;
+};
+
 export const getItems = (key: string): any | null => {
   if (typeof window !== "undefined") {
     try {

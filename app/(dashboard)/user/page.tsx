@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Button from "@/components/Button";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { formatDate, sortedData } from "@/lib/utils";
+import { formatDate, getTableId, sortedData } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { UserService } from "@/api/userService";
 import { DocumentData } from "firebase/firestore";
@@ -19,7 +19,7 @@ import MessageBox from "@/components/Dialog";
 import { toast } from "react-toastify";
 import MessageDialog from "@/components/MessageDialog";
 import { useAppDispatch } from "@/hooks/useStore";
-import { setSelectedUser } from "@/lib/store/feature/app.slice";
+import { setAppLoading, setSelectedUser } from "@/lib/store/feature/app.slice";
 
 export default function UserPage() {
   const [user, setUser] = React.useState<DocumentData[] | null>(null);
@@ -52,12 +52,14 @@ export default function UserPage() {
   const fetchData = async (): Promise<void> => {
     try {
       setLoading(true);
+      dispatch(setAppLoading(true));
       const res = await UserService.getAllUsers();
       setUser(res || null);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setLoading(false);
+      dispatch(setAppLoading(false));
     }
   };
 
@@ -172,7 +174,7 @@ export default function UserPage() {
             {sortedUsers.length > 0 &&
               sortedUsers.map((user, index) => (
                 <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={user.id}>
-                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                  <TableCell>{getTableId(page, rowsPerPage, index)}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{`${formatDate(new Date(user.created_at), "string")}`}</TableCell>

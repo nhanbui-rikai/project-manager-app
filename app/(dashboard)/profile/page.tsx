@@ -11,17 +11,18 @@ import { updateUser } from "@/lib/store/feature/auth.slice";
 import { useState } from "react";
 import { User } from "@/constants/types";
 import { useTranslation } from "react-i18next";
+import { setAppLoading } from "@/lib/store/feature/app.slice";
 
 export default function Profile() {
   const { currentUser } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { t } = useTranslation();
-
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const handleUpdate = ({ userName, phoneNumber, gender, bio }: User) => {
     setIsLoading(true);
+    dispatch(setAppLoading(true));
     updateProfile({ userName, bio, gender, phoneNumber, id: currentUser.id })
       .then((res) => {
         toast.success(t("app.profilePage.toastSuccess"));
@@ -39,7 +40,10 @@ export default function Profile() {
       .catch((err) => {
         toast.error(t("app.profilePage.toastFail"));
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        dispatch(setAppLoading(false));
+      });
   };
 
   const form = useForm({
