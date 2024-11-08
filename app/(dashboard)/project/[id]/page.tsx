@@ -1,7 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { TableCell, TableRow, Typography, Button } from "@mui/material";
+import {
+  TableCell,
+  TableRow,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import TextInput from "@/components/TextInput";
 import DateInput from "@/components/DateInput";
 import TextArea from "@/components/TextArea";
@@ -16,7 +26,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import ButtonApp from "@/components/Button";
 import CreateTaskPopup from "@/components/CreateTask";
 import { useAppSelector } from "@/hooks/useStore";
-import { createTask, getTaskById, updateTask } from "@/api/taskService";
+import { createTask, deleteTask, getTaskById, updateTask } from "@/api/taskService";
 import { toast } from "react-toastify";
 import { TaskData, User } from "@/constants/types";
 import { updateProject } from "@/api/projectService";
@@ -55,10 +65,8 @@ interface TaskProps {
 }
 
 const DetailProjectPage: React.FC = () => {
-  const [data, setData] = React.useState<FormData | null>(null);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [loading, setLoading] = React.useState(false);
+  const [page] = React.useState(0);
+  const [rowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState<keyof TaskProps>("title");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [isEdit, setIsEdit] = React.useState(false);
@@ -69,6 +77,8 @@ const DetailProjectPage: React.FC = () => {
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const { currentProjectData } = useAppSelector((state) => state.project);
+
+  const [deleteTaskId, setDeleteTaskId] = useState(null);
 
   const {
     register,
@@ -112,6 +122,21 @@ const DetailProjectPage: React.FC = () => {
     clearErrors([field]);
   };
 
+  const handleDeleteTask = () => {
+    deleteTask(deleteTaskId, currentProjectData?.id)
+      .then((res) => {
+        const newTasks = taskData?.filter((task) => task.id !== deleteTaskId);
+        if (newTasks) setTaskData(newTasks);
+        toast.success(t("message.delete_success"));
+      })
+      .catch((err) => {
+        toast.error(t("message.delete_err"));
+      })
+      .finally(() => {
+        setDeleteTaskId(null);
+      });
+  };
+
   React.useEffect(() => {
     if (currentProjectData) {
       setTaskData(currentProjectData.tasks);
@@ -123,8 +148,8 @@ const DetailProjectPage: React.FC = () => {
     { id: "title", name: "Title" },
     { id: "description", name: "Description" },
     { id: "status", name: "Status" },
-    { id: "actual_hours", name: "Actual Hours" },
     { id: "estimate_hours", name: "Estimate Hours" },
+    { id: "actual_hours", name: "Actual Hours" },
     { id: "due_date", name: "Due Date" },
     { id: "action", name: "Action" },
   ];
@@ -159,13 +184,14 @@ const DetailProjectPage: React.FC = () => {
             },
           ];
         });
+        setCreatePopup(false);
       })
       .catch((err) => {
         toast.error(t("app.createTask.toastFail"));
       });
   };
 
-  const handleUpdateTask = ({ values, members }: { values: TaskData; members: Array<User> }) => {
+  const handleUpdateTask = ({ values, members }: { values: any; members: Array<User> }) => {
     updateTask(editTask.id, values, members)
       .then((res) => {
         toast.success(t("app.updateTask.toastSuccess"));
@@ -178,17 +204,16 @@ const DetailProjectPage: React.FC = () => {
                 ...task,
                 title: values?.title,
                 description: values?.description,
-                status: values?.status,
+                status: values?.isCompleted ? "completed" : "pending",
                 actual_hours: values?.actualHour,
                 estimate_hours: values?.estimatedHour,
-                due_date: values?.dueDate,
+                due_date: values?.date,
                 created_at: values?.createdAt,
                 updated_at: new Date(),
               };
             }
             return task;
           });
-
           return newState;
         });
       })
@@ -299,86 +324,89 @@ const DetailProjectPage: React.FC = () => {
             />
           </div>
         </div>
-        <div className="min-h-96 my-5">
-          <Button
-            className={`${!isEdit && "cursor-not-allowed"}`}
-            disabled={!isEdit}
-            variant="contained"
-            color="primary"
-            onClick={() => setCreatePopup(true)}
-          >
-            Add Task
-          </Button>
-
-          <TableData
-            column={column}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={(property) => handleRequestSort(property as keyof TaskProps)}
-            tableHeight="calc(100vh - 200px)"
-          >
-            <RenderCondition condition={Boolean(taskData)}>
-              {sortedProjects.length > 0 &&
-                sortedProjects.map((item, index) => (
-                  <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={item.id}>
-                    <TableCell className="max-w-table-cell">{page * rowsPerPage + index + 1}</TableCell>
-                    <TableCell className="max-w-table-cell">{item.title}</TableCell>
-                    <TableCell className="max-w-table-cell">
-                      <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
-                    </TableCell>
-
-                    <TableCell className="max-w-table-cell">
-                      <Text maxWidth={100} maxLength={100} text={item.status || "-"} />
-                    </TableCell>
-
-                    <TableCell className="max-w-table-cell">
-                      <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
-                    </TableCell>
-                    <TableCell className="max-w-table-cell">
-                      <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
-                    </TableCell>
-
-                    <TableCell className="max-w-table-cell">{formatDate(item.due_date, "string") || "-"}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 w-full h-full">
-                        <ButtonApp
-                          disabled={!isEdit}
-                          onClick={() => {
-                            getTaskById(item.id)
-                              .then((res) => {
-                                setEditTask(res);
-                              })
-                              .catch((err) => {
-                                console.log(err);
-                              });
-                          }}
-                          name={<EditNoteIcon />}
-                          className={cn(
-                            "bg-transparent text-secondary hover:text-secondary/90",
-                            !isEdit && "cursor-not-allowed",
-                          )}
-                        />
-
-                        <ButtonApp
-                          disabled={!isEdit}
-                          onClick={() => {}}
-                          className={cn(
-                            "bg-transparent text-danger hover:text-danger/90",
-                            !isEdit && "cursor-not-allowed",
-                          )}
-                          name={<DeleteIcon />}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </RenderCondition>
-          </TableData>
-          <RenderCondition condition={!Boolean(taskData)}>
-            <div className="text-center w-full py-2">{t("app.no_data")}</div>
-          </RenderCondition>
-        </div>
       </form>
+
+      <div className="min-h-96 my-5">
+        <Button
+          className={`${!isEdit && "cursor-not-allowed"}`}
+          disabled={!isEdit}
+          variant="contained"
+          color="primary"
+          onClick={() => setCreatePopup(true)}
+        >
+          Add Task
+        </Button>
+
+        <TableData
+          column={column}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={(property) => handleRequestSort(property as keyof TaskProps)}
+          tableHeight="calc(100vh - 200px)"
+        >
+          <RenderCondition condition={Boolean(taskData)}>
+            {sortedProjects.length > 0 &&
+              sortedProjects.map((item, index) => (
+                <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={item.id}>
+                  <TableCell className="max-w-table-cell">{page * rowsPerPage + index + 1}</TableCell>
+                  <TableCell className="max-w-table-cell">{item.title}</TableCell>
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.status || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
+                  </TableCell>
+                  <TableCell className="max-w-table-cell">
+                    <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
+                  </TableCell>
+
+                  <TableCell className="max-w-table-cell">{formatDate(item.due_date, "string") || "-"}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2 w-full h-full">
+                      <ButtonApp
+                        disabled={!isEdit}
+                        onClick={() => {
+                          getTaskById(item.id)
+                            .then((res) => {
+                              setEditTask(res);
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                        name={<EditNoteIcon />}
+                        className={cn(
+                          "bg-transparent text-secondary hover:text-secondary/90",
+                          !isEdit && "cursor-not-allowed",
+                        )}
+                      />
+
+                      <ButtonApp
+                        disabled={!isEdit}
+                        onClick={() => {
+                          setDeleteTaskId(item.id);
+                        }}
+                        className={cn(
+                          "bg-transparent text-danger hover:text-danger/90",
+                          !isEdit && "cursor-not-allowed",
+                        )}
+                        name={<DeleteIcon />}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </RenderCondition>
+        </TableData>
+        <RenderCondition condition={!Boolean(taskData)}>
+          <div className="text-center w-full py-2">{t("app.no_data")}</div>
+        </RenderCondition>
+      </div>
 
       <CreateTaskPopup // for update
         data={editTask}
@@ -390,6 +418,26 @@ const DetailProjectPage: React.FC = () => {
           handleUpdateTask(values);
         }}
       />
+
+      <Dialog
+        open={deleteTaskId !== null}
+        onClose={() => setDeleteTaskId(null)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{t("deleteTaskModal.header")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">{t("deleteTaskModal.description")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => setDeleteTaskId(null)}>
+            {t("deleteTaskModal.cancelBtn")}
+          </Button>
+          <Button variant="contained" color="error" onClick={handleDeleteTask} autoFocus>
+            {t("deleteTaskModal.deleteBtn")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
