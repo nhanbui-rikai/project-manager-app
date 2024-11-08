@@ -4,15 +4,10 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
+import PersonIcon from "@mui/icons-material/Person";
 import Logout from "@mui/icons-material/Logout";
-import { deepOrange } from "@mui/material/colors";
-import Link from "next/link";
 import { Fragment, useState } from "react";
-import LockIcon from "@mui/icons-material/Lock";
 import { useAppDispatch } from "@/hooks/useStore";
 import { logout } from "@/lib/store/feature/auth.slice";
 import { useRouter } from "next/navigation";
@@ -40,18 +35,18 @@ export default function AccountSettingMenu() {
   return (
     <Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <Avatar sx={{ width: 32, height: 32, bgcolor: deepOrange[500] }}>M</Avatar>
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
+          <Avatar sx={{ width: 32, height: 32 }}>
+            <PersonIcon />
+          </Avatar>
+        </IconButton>
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -90,29 +85,6 @@ export default function AccountSettingMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link href={"/profile"}>
-          <MenuItem>
-            <Avatar /> Profile
-          </MenuItem>
-        </Link>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <Link href={"/password"}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <LockIcon fontSize="small" />
-            </ListItemIcon>
-            Password
-          </MenuItem>
-        </Link>
         <MenuItem onClick={logOut}>
           <ListItemIcon>
             <Logout fontSize="small" />

@@ -23,7 +23,7 @@ export const formatDate = (date: Date | string, type: "date" | "string"): string
 
 export const getStringFromArrayData = (data: []) => {
   if (data) {
-    return data.join(",");
+    return data.join(", ");
   }
   return null;
 };

@@ -293,26 +293,24 @@ const DetailProjectPage: React.FC = () => {
               {sortedProjects.length > 0 &&
                 sortedProjects.map((item, index) => (
                   <TableRow className="hover:cursor-pointer hover:bg-slate-50/90" key={item.id}>
-                    <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-table-cell">{page * rowsPerPage + index + 1}</TableCell>
+                    <TableCell className="max-w-table-cell">{item.title}</TableCell>
+                    <TableCell className="max-w-table-cell">
                       <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
                     </TableCell>
-                    <TableCell>
-                      <Text maxWidth={100} maxLength={100} text={item.title || "-"} />
-                    </TableCell>
-                    <TableCell>
+
+                    <TableCell className="max-w-table-cell">
                       <Text maxWidth={100} maxLength={100} text={item.status || "-"} />
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="max-w-table-cell">
                       <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-table-cell">
                       <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
                     </TableCell>
 
-                    <TableCell>{formatDate(item.due_date, "string") || "-"}</TableCell>
+                    <TableCell className="max-w-table-cell">{formatDate(item.due_date, "string") || "-"}</TableCell>
                     <TableCell>
                       <div className="flex gap-2 w-full h-full">
                         <ButtonApp
@@ -349,7 +347,7 @@ const DetailProjectPage: React.FC = () => {
             </RenderCondition>
           </TableData>
           <RenderCondition condition={!Boolean(taskData)}>
-            <div className="text-center w-full py-2">{t("no_data")}</div>
+            <div className="text-center w-full py-2">{t("app.no_data")}</div>
           </RenderCondition>
         </div>
       </form>
