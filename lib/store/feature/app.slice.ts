@@ -7,12 +7,14 @@ export interface AppState {
   isOpenOrClose: boolean;
   language: string;
   loading: boolean;
+  selectedUser: any;
 }
 
 const initialState: AppState = {
   isOpenOrClose: false,
   language: "en",
   loading: false,
+  selectedUser: [],
 };
 
 export const AppSlice = createSlice({
@@ -30,8 +32,12 @@ export const AppSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+
+    setSelectedUser: (state, action: PayloadAction<any>) => {
+      state.selectedUser = action.payload;
+    },
   },
 });
 
-export const { toggleOpenSideBar, setLanguage } = AppSlice.actions;
+export const { toggleOpenSideBar, setLanguage, setSelectedUser } = AppSlice.actions;
 export default AppSlice.reducer;

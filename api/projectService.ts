@@ -216,7 +216,7 @@ export async function getProjectById(projectId: string) {
   }
 }
 
-export async function searchProjectsByName(name: string): Promise<Project[]> {
+export async function searchProjectsByName(name: string) {
   try {
     const projectsCollectionRef = collection(db, "projects");
 
@@ -235,8 +235,7 @@ export async function searchProjectsByName(name: string): Promise<Project[]> {
 
     return projects;
   } catch (error) {
-    console.error("Error searching projects by name:", error);
-    throw error;
+    toast.error(error instanceof Error ? error.message : "An error occurred");
   }
 }
 
