@@ -14,7 +14,7 @@ const MenuSidebarItems: React.FC<PropType> = ({ className, icon, name, path }) =
   const route = useRouter();
 
   const pathname = usePathname();
-  const isActive = pathname === path;
+  let isActive = pathname === path;
   const handleOnClick = () => {
     route.push(path || "/");
   };

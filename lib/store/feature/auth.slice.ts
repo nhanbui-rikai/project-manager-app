@@ -9,6 +9,7 @@ export interface AuthState {
   currentUser: any;
   loading: boolean;
   err: Error | null;
+  isAdmin: boolean;
 }
 // Login google
 export const loginUser = createAsyncThunk(
@@ -37,6 +38,7 @@ const initialState: AuthState = {
   currentUser: null,
   loading: false,
   err: null,
+  isAdmin: false,
 };
 
 export const AuthSlice = createSlice({
@@ -46,11 +48,13 @@ export const AuthSlice = createSlice({
     updateUser: (state, action: PayloadAction<any>) => {
       state.isLogin = true;
       state.currentUser = action.payload;
+      action.payload.role === "member" ? (state.isAdmin = false) : (state.isAdmin = true);
     },
 
     login: (state, action: PayloadAction<any>) => {
       state.isLogin = true;
       state.currentUser = action.payload;
+      action.payload.role === "member" ? (state.isAdmin = false) : (state.isAdmin = true);
       const hashUser = encryptData({ ...action.payload, isLogin: true });
       if (hashUser) {
         Cookies.set("userAuth", hashUser);
@@ -63,11 +67,6 @@ export const AuthSlice = createSlice({
       state.isLogin = false;
       removeItems("currentUser");
       Cookies.remove("userAuth");
-    },
-
-    update: (state, action: PayloadAction<any>) => {
-      state.isLogin = true;
-      state.currentUser = action.payload;
     },
 
     register: () => {},

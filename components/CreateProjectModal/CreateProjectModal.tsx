@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 interface FormData {
   name: string;
   description: string;
-  task: string[];
+  tasks: string[];
   members: string[];
   start_date: Date | string;
   end_date: Date | string;
@@ -106,7 +106,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       description: "",
       start_date: "",
       end_date: "",
-      task: [],
+      tasks: [],
       members: [],
     });
     handleCloseCreateProjectModal();

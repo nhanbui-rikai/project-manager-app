@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import ExpandSideBar from "@/components/AppSideBar/ExpandSideBar";
 import MiniSideBar from "@/components/AppSideBar/MiniSideBar";
 import Header from "@/components/Header";
@@ -8,25 +7,33 @@ import { useAppSelector } from "@/hooks/useStore";
 import MenuSidebarItems from "@/components/AppSideBar/MenuSidebarItems";
 import PersonIcon from "@mui/icons-material/Person";
 import WorkIcon from "@mui/icons-material/Work";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import RenderCondition from "@/components/RederCondition";
 const LandingLayout = ({ children }: { children: React.ReactNode }) => {
   const { isOpenOrClose } = useAppSelector((state) => state.app);
+  const { isAdmin } = useAppSelector((state) => state.auth);
+
   return (
-    <main className="w-full h-full bg-slate-200">
-      {/* Main content */}
+    <main className="w-full h-screen bg-slate-200">
       <ExpandSideBar>
         <div className="w-full">
           <MenuSidebarItems icon={<WorkIcon />} path="/project" name="Projects" />
-          <MenuSidebarItems icon={<PersonIcon />} path="/user" name="User" />
-          <MenuSidebarItems icon={<SettingsIcon />} path="/create_task" name="CreateTask" />
+          <RenderCondition condition={isAdmin}>
+            <MenuSidebarItems icon={<PeopleAltIcon />} path="/user" name="User" />
+          </RenderCondition>
+          <MenuSidebarItems icon={<PersonIcon />} path="/profile" name="Profile" />
+          <MenuSidebarItems icon={<SettingsIcon />} path="/password" name="Settings" />
         </div>
       </ExpandSideBar>
 
       <MiniSideBar>
         <MenuSidebarItems icon={<WorkIcon />} path="/project" />
-        <MenuSidebarItems icon={<PersonIcon />} path="/user" />
+        <RenderCondition condition={isAdmin}>
+          <MenuSidebarItems icon={<PeopleAltIcon />} path="/user" />
+        </RenderCondition>
+        <MenuSidebarItems icon={<PersonIcon />} path="/profile" />
+        <MenuSidebarItems icon={<SettingsIcon />} path="/password" />
       </MiniSideBar>
 
       <div
@@ -36,7 +43,7 @@ const LandingLayout = ({ children }: { children: React.ReactNode }) => {
         )}
       >
         <Header />
-        <div className="bg-white mt-4 h-main p-4 rounded-md overflow-auto">{children}</div>
+        <div className="bg-white mt-4 h-main max-w-main p-4 rounded-md overflow-auto">{children}</div>
       </div>
     </main>
   );

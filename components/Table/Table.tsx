@@ -17,21 +17,30 @@ interface TableProps {
   order?: "asc" | "desc";
   orderBy?: string;
   onRequestSort: (property: string) => void;
+  style?: object;
 }
 
-const TableData: React.FC<TableProps> = ({ column, children, tableHeight, order, orderBy, onRequestSort }) => {
+const TableData: React.FC<TableProps> = ({
+  column,
+  children,
+  style = {},
+  tableHeight,
+  order,
+  orderBy,
+  onRequestSort,
+}) => {
   const handleSort = (property: string) => {
     onRequestSort(property);
   };
 
   return (
-    <TableContainer sx={{ maxHeight: tableHeight }}>
+    <TableContainer sx={{ maxHeight: tableHeight }} style={style}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
             {column &&
               column.map((col) => (
-                <TableCell key={col.id} className="font-bold">
+                <TableCell key={col.id} className="font-bold max-w-table-cell">
                   <TableSortLabel
                     active={orderBy === col.id}
                     direction={orderBy === col.id ? order : "asc"}

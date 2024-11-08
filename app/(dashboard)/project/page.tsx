@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import RenderCondition from "@/components/RederCondition";
 import TableData from "@/components/Table/Table";
 import { formatDate, getStringFromArrayData, sortedData } from "@/lib/utils";
-import { TableCell, TablePagination, TableRow, Typography } from "@mui/material";
+import { Box, Modal, TableCell, TablePagination, TableRow, Typography } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { getAllProjects, updateProject } from "@/api/projectService";
 import Text from "@/components/Text";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/hooks/useStore";
+import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
 import { setCurrentProjectData, setProjectData } from "@/lib/store/feature/project.slice";
 import CreateProjectModal from "@/components/CreateProjectModal/CreateProjectModal";
 import { UserService } from "@/api/userService";
@@ -30,6 +30,7 @@ interface Project {
   start_date: string;
   end_date: string;
 }
+
 type Option = { value: string; label: string };
 
 const ProjectPage = () => {
@@ -43,10 +44,14 @@ const ProjectPage = () => {
   const [openCreateProjectModal, setOpenCreateProjectModal] = React.useState(false);
   const [memberOptions, setMemberOptions] = React.useState<Option[]>([]);
   const [openRemoveModal, setOpenRemoveModal] = React.useState(false);
+  const [selectedProject, setSelectedProject] = React.useState("");
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
 
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const { isAdmin } = useAppSelector((state) => state.auth);
 
   const column = [
     { id: "id", name: "ID" },
@@ -79,10 +84,10 @@ const ProjectPage = () => {
     }
   };
 
-  const handleDeleteProjects = async (id: string) => {
+  const handleDeleteProjects = async () => {
     try {
       setRemoveLoading(true);
-      const res = await updateProject(id, { deleted: true });
+      const res = await updateProject(selectedProject, { deleted: true });
       if (res) {
         toast.success("Deleted successfully", {
           position: "top-center",
@@ -94,6 +99,7 @@ const ProjectPage = () => {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setRemoveLoading(false);
+      setOpenRemoveModal(false);
     }
   };
 
@@ -123,24 +129,36 @@ const ProjectPage = () => {
   };
 
   const handleClickProject = (id: string) => {
-    const filterProjectData = data && data.find((item) => item.id);
+    const filterProjectData = data && data.find((item) => item.id === id);
     dispatch(setCurrentProjectData(filterProjectData));
     router.push(`project/${id}`);
   };
 
   const handleCloseCreateProjectModal = () => {
     setOpenCreateProjectModal(false);
+    setOpenRemoveModal(false);
   };
-
-  const handleRemoveProject = () => {};
 
   const handleCloseModal = () => {
     setOpenRemoveModal(false);
   };
 
+  const handleOpenRemoveProject = (id: string) => {
+    setSelectedProject(id);
+    setOpenRemoveModal(true);
+  };
+
   const sortedProjects = sortedData(data, orderBy, order);
   return (
     <>
+      <MessageDialog
+        title="Delete this project ?"
+        open={openRemoveModal}
+        loading={deleteLoading}
+        onConfirm={handleDeleteProjects}
+        onClose={handleCloseModal}
+      />
+
       <CreateProjectModal
         fetchData={fetchData}
         memberOptions={memberOptions}
@@ -170,10 +188,10 @@ const ProjectPage = () => {
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>
-                    <Text maxWidth={100} maxLength={100} text={item.description || "-"} />
+                    <Text maxWidth={100} maxLength={20} text={item.description || "-"} />
                   </TableCell>
                   <TableCell>
-                    <Text maxWidth={100} maxLength={100} text={getStringFromArrayData(item.members) || "-"} />
+                    <Text maxWidth={100} maxLength={20} text={getStringFromArrayData(item.members) || "-"} />
                   </TableCell>
                   <TableCell>
                     {formatDate(item.start_date, "string") || "-"} - {formatDate(item.end_date, "string") || "-"}
@@ -186,20 +204,18 @@ const ProjectPage = () => {
                         className="bg-transparent text-primary hover:text-primary/90"
                         name={<RemoveRedEyeIcon />}
                       />
-                      <Button
-                        name={<EditNoteIcon />}
-                        className="bg-transparent text-secondary hover:text-secondary/90"
-                      />
 
-                      <Button
-                        onClick={() => handleDeleteProjects(item.id)}
-                        className="bg-transparent text-danger hover:text-danger/90"
-                        name={
-                          <>
-                            {loading && <LoadingSpinner />} <DeleteIcon />
-                          </>
-                        }
-                      />
+                      <RenderCondition condition={isAdmin}>
+                        <Button
+                          onClick={() => handleOpenRemoveProject(item.id)}
+                          className="bg-transparent text-danger hover:text-danger/90"
+                          name={
+                            <>
+                              {loading && <LoadingSpinner />} <DeleteIcon />
+                            </>
+                          }
+                        />
+                      </RenderCondition>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -207,7 +223,7 @@ const ProjectPage = () => {
           </RenderCondition>
         </TableData>
         <RenderCondition condition={!Boolean(data)}>
-          <div className="text-center w-full py-2">{t("no_data")}</div>
+          <div className="text-center w-full py-2">{t("app.no_data")}</div>
         </RenderCondition>
         {data && (
           <TablePagination

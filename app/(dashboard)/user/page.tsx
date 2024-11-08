@@ -147,7 +147,7 @@ export default function UserPage() {
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
-            tableHeight="calc(100vh - 200px)"
+            tableHeight="calc(100vh - 235px)"
           >
             <TableRow>
               <TableCell>{selectUser.id}</TableCell>
@@ -180,11 +180,6 @@ export default function UserPage() {
                   <TableCell>
                     <div className="flex gap-2 w-full h-full">
                       <Button
-                        onClick={() => handleOpenDetailModal(user)}
-                        className="bg-transparent text-primary hover:text-primary/90"
-                        name={<RemoveRedEyeIcon />}
-                      />
-                      <Button
                         onClick={() => handleClickEditUser(user.id)}
                         name={<EditNoteIcon />}
                         className="bg-transparent text-secondary hover:text-secondary/90"
@@ -202,7 +197,7 @@ export default function UserPage() {
           </RenderCondition>
         </TableData>
         <RenderCondition condition={!Boolean(user)}>
-          <div className="text-center w-full py-2">{t("no_data")}</div>
+          <div className="text-center w-full py-2">{t("app.no_data")}</div>
         </RenderCondition>
         {user && (
           <TablePagination
