@@ -123,6 +123,10 @@ export async function getAllProjects(): Promise<Project[]> {
             projectData.end_date instanceof Timestamp
               ? formatDate(new Date(projectData.end_date.seconds * 1000), "string")
               : projectData.end_date,
+          updated_at:
+            projectData.updated_at instanceof Timestamp
+              ? formatDate(new Date(projectData.updated_at.seconds * 1000), "string")
+              : projectData.updated_at,
           members: member,
           tasks: tasks,
         };
@@ -205,6 +209,10 @@ export async function getProjectById(projectId: string) {
         projectData.end_date instanceof Timestamp
           ? new Date(projectData.end_date.seconds * 1000)
           : projectData.end_date,
+      updated_at:
+        projectData.updated_at instanceof Timestamp
+          ? new Date(projectData.updated_at.seconds * 1000)
+          : projectData.updated_at,
       members: members,
       tasks: tasks,
     };
@@ -243,7 +251,7 @@ export async function updateProject(id: string, updateData: any) {
   try {
     const projectRef = doc(db, "projects", id);
 
-    await updateDoc(projectRef, updateData);
+    const res = await updateDoc(projectRef, updateData);
 
     return { success: true };
   } catch (error) {
