@@ -1,6 +1,8 @@
 "use client";
 
+import { encryptData, removeItems, setItems } from "@/lib/utils";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 export interface AuthState {
   isLogin: boolean;
@@ -49,6 +51,23 @@ export const AuthSlice = createSlice({
     login: (state, action: PayloadAction<any>) => {
       state.isLogin = true;
       state.currentUser = action.payload;
+      const hashUser = encryptData({ ...action.payload, isLogin: true });
+      if (hashUser) {
+        Cookies.set("userAuth", hashUser);
+      }
+      setItems("currentUser", action.payload);
+    },
+
+    logout: (state, action: PayloadAction<any>) => {
+      state.currentUser = null;
+      state.isLogin = false;
+      removeItems("currentUser");
+      Cookies.remove("userAuth");
+    },
+
+    update: (state, action: PayloadAction<any>) => {
+      state.isLogin = true;
+      state.currentUser = action.payload;
     },
 
     register: () => {},
@@ -85,5 +104,5 @@ export const AuthSlice = createSlice({
   },
 });
 
-export const { updateUser, login, register } = AuthSlice.actions;
+export const { updateUser, login, register, logout } = AuthSlice.actions;
 export default AuthSlice.reducer;

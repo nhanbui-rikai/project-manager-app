@@ -1,5 +1,4 @@
 "use client";
-
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -7,25 +6,35 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { deepOrange } from "@mui/material/colors";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import LockIcon from "@mui/icons-material/Lock";
-import { useForm } from "react-hook-form";
+import { useAppDispatch } from "@/hooks/useStore";
+import { logout } from "@/lib/store/feature/auth.slice";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function AccountSettingMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const logOut = () => {
+    toast.success("Logout successfully", { position: "top-center" });
+    dispatch(logout("logout"));
+    handleClose();
+    router.push("/login");
   };
 
   return (
@@ -104,7 +113,7 @@ export default function AccountSettingMenu() {
             Password
           </MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

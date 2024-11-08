@@ -1,15 +1,18 @@
 "use client";
-import { useAppSelector } from "@/hooks/useStore";
+import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
+import { updateUser } from "@/lib/store/feature/auth.slice";
+import { getItems } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const AuthContext = ({ children }: { children: React.ReactNode }) => {
-  const { isLogin } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!isLogin) router.push("/login");
-  });
-  const router = useRouter();
+    const user = getItems("currentUser");
+    if (user) dispatch(updateUser(user));
+  }, []);
+
   return <>{children}</>;
 };
 
