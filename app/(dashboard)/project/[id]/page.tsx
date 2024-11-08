@@ -19,6 +19,9 @@ import { useAppSelector } from "@/hooks/useStore";
 import { createTask, getTaskById, updateTask } from "@/api/taskService";
 import { toast } from "react-toastify";
 import { TaskData, User } from "@/constants/types";
+import { updateProject } from "@/api/projectService";
+import { Timestamp } from "firebase/firestore";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface FormData {
   name: string;
@@ -81,7 +84,29 @@ const DetailProjectPage: React.FC = () => {
     },
   });
 
-  const onSubmit = (data: FormData) => {};
+  const onSubmit = async (data: FormData) => {
+    try {
+      setLoading(true);
+      const newData = {
+        ...data,
+        updated_at: Timestamp.fromDate(new Date()),
+        start_date: Timestamp.fromDate(new Date(data.start_date)),
+        end_date: Timestamp.fromDate(new Date(data.end_date)),
+      };
+
+      const res = await updateProject(params.id, newData);
+      if (res) {
+        toast.success("Update project successfully", {
+          position: "top-center",
+        });
+        setIsEdit(false);
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleResetError = (field: keyof FormData) => {
     clearErrors([field]);
@@ -194,6 +219,9 @@ const DetailProjectPage: React.FC = () => {
                   color="primary"
                   className={`${!isEdit && "cursor-not-allowed"}`}
                 >
+                  <RenderCondition condition={loading}>
+                    <LoadingSpinner />
+                  </RenderCondition>
                   Submit
                 </Button>
                 <Button
