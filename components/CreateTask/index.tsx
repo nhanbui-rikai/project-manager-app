@@ -11,9 +11,10 @@ import {
   AccessTimeOutlined as AccessTimeOutlinedIcon,
   DateRange as DateRangeIcon,
 } from "@mui/icons-material";
-
-import Dialog from "@mui/material/Dialog";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import Dialog from "@mui/material/Dialog";
+
 import { ButtonBoardCard } from "../ButtonBoardCard";
 import { createContext, Fragment, useEffect, useState } from "react";
 import { Avatar, Button, ClickAwayListener, TextareaAutosize, TextField } from "@mui/material";
@@ -83,7 +84,7 @@ export default function CreateTaskPopup({
       description: data?.description || "",
       actualHour: data?.actualHour || 0,
       estimatedHour: data?.estimatedHour || 0,
-      isCompleted: data?.status === "pending",
+      isCompleted: data?.status === "completed" ? true : false,
     },
   });
 
@@ -112,7 +113,7 @@ export default function CreateTaskPopup({
         description: data.description || "",
         actualHour: data.actualHour || 0,
         estimatedHour: data.estimatedHour || 0,
-        isCompleted: data.status === "pending",
+        isCompleted: data.status === "completed",
       });
     }
   }, [data, taskForm]);
@@ -252,7 +253,9 @@ export default function CreateTaskPopup({
                     render={({ field }) => (
                       <TextField
                         value={field.value}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                        onChange={(e) => {
+                          if (!isNaN(Number(e.target.value))) field.onChange(e.target.value);
+                        }}
                         type="number"
                         placeholder="4"
                         sx={{
@@ -355,13 +358,21 @@ export default function CreateTaskPopup({
                   <Person4OutlinedIcon className="ml-1 mr-2" fontSize="small" />
                 </ButtonBoardCard>
                 <ButtonBoardCard
-                  nameBtn={t("app.taskEditor.completedStatus")}
+                  nameBtn={
+                    taskForm.getValues("isCompleted")
+                      ? t("app.taskEditor.completedStatus")
+                      : t("app.taskEditor.pendingStatus")
+                  }
                   onHandleEvent={() => {
                     let isCompleted = watch("isCompleted");
                     taskForm.setValue("isCompleted", !isCompleted);
                   }}
                 >
-                  <CheckBoxOutlinedIcon className="ml-1 mr-2" fontSize="small" />
+                  {taskForm.getValues("isCompleted") ? (
+                    <CheckBoxIcon color="success" className="ml-1 mr-2" fontSize="small" />
+                  ) : (
+                    <CheckBoxOutlinedIcon className="ml-1 mr-2" fontSize="small" />
+                  )}
                 </ButtonBoardCard>
                 <ButtonBoardCard nameBtn={t("app.taskEditor.duedateLabel")}>
                   <AccessTimeOutlinedIcon className="ml-1 mr-2" fontSize="small" />

@@ -69,7 +69,8 @@
   },
   "no_data": "Không có dữ liệu",
   "message": {
-    "delete_success": "Xoá thành công"
+    "delete_success": "Xoá thành công",
+    "delete_err": "Xóa không thành công"
   },
   "userPage":{
     "idLabel":"Id",
@@ -79,5 +80,11 @@
     "updatedAtLabel":"Ngày cập nhật gần nhất",
     "actionLabel": "Chức năng",
     "rowLabel": "Số hàng trên 1 trang"
+  },
+  "deleteTaskModal": {
+    "header": "Bạn có chắc muốn xóa thẻ này không?",
+    "description":"Dữ liệu toàn bộ trong thẻ sẽ bị xóa và không thể hoàn lại",
+    "cancelBtn":"Hủy",
+    "deleteBtn":"Xóa"
   }
 }

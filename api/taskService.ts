@@ -1,6 +1,16 @@
 import { TaskData, User } from "@/constants/types";
 import db from "@/lib/firebase/firestore";
-import { addDoc, collection, doc, DocumentReference, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  DocumentReference,
+  getDoc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 
 export async function getTaskById(id: string) {
   try {
@@ -52,7 +62,7 @@ export async function getTaskById(id: string) {
   }
 }
 
-export async function updateTask(id: string, taskData: TaskData, members: Array<User>) {
+export async function updateTask(id: string, taskData: any, members: Array<User>) {
   try {
     const docRef = doc(db, "tasks", id);
 
@@ -71,6 +81,7 @@ export async function updateTask(id: string, taskData: TaskData, members: Array<
       due_date: Timestamp.fromDate(taskData.dueDate || new Date()),
       updated_at: Timestamp.now(),
       assigned_to: refArr,
+      status: taskData?.isCompleted ? "completed" : "pending",
     });
 
     return true;
@@ -112,6 +123,30 @@ export async function createTask(taskData: TaskData, members: Array<User>, proje
       tasks: tasksRef,
     });
     return newTask.id;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteTask(taskId: string | null, projectId?: string) {
+  try {
+    const taskRef = doc(db, "tasks", taskId || ""); // Thay "collectionName" và "documentID" theo dữ liệu của bạn
+    await deleteDoc(taskRef);
+    const docRef = doc(db, "projects", projectId || "");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const referencesArray = data.tasks || [];
+      const updatedReferencesArray = referencesArray.filter((ref: any) => ref.id !== taskId);
+
+      await updateDoc(docRef, {
+        tasks: updatedReferencesArray,
+      });
+
+      return data;
+    } else {
+      return null;
+    }
   } catch (error) {
     throw error;
   }

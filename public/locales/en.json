@@ -83,6 +83,12 @@
     "updatedAtLabel":"Updated At",
     "actionLabel": "Actions",
      "rowLabel": "Rows per page"
+  },
+  "deleteTaskModal": {
+    "header": "Are you sure you want to delete this card?",
+    "description":"All data in the card will be erased and cannot be recovered",
+    "cancelBtn":"Cancel",
+    "deleteBtn":"Delete"
   }
  
 }
