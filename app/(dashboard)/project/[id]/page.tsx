@@ -184,6 +184,7 @@ const DetailProjectPage: React.FC = () => {
             },
           ];
         });
+
         setCreatePopup(false);
       })
       .catch((err) => {
@@ -232,6 +233,9 @@ const DetailProjectPage: React.FC = () => {
       .catch((error) => {
         toast.error(error instanceof Error ? error.message : "An error occurred");
       });
+  };
+  const handleChooseEdit = (id: any) => {
+    setDeleteTaskId(id);
   };
   return (
     <>
@@ -368,10 +372,10 @@ const DetailProjectPage: React.FC = () => {
                   </TableCell>
 
                   <TableCell className="max-w-table-cell">
-                    <Text maxWidth={100} maxLength={100} text={item.actual_hours} />
+                    <Text maxWidth={100} maxLength={100} text={item.estimate_hours} />
                   </TableCell>
                   <TableCell className="max-w-table-cell">
-                    <Text maxWidth={100} maxLength={100} text={item.estimate_hours || "-"} />
+                    <Text maxWidth={100} maxLength={100} text={item.actual_hours || "-"} />
                   </TableCell>
 
                   <TableCell className="max-w-table-cell">{formatDate(item.due_date, "string") || "-"}</TableCell>
@@ -389,7 +393,9 @@ const DetailProjectPage: React.FC = () => {
 
                       <ButtonApp
                         disabled={!isEdit}
-                        onClick={() => {}}
+                        onClick={() => {
+                          handleChooseEdit(item.id);
+                        }}
                         className={cn(
                           "bg-transparent text-danger hover:text-danger/90",
                           !isEdit && "cursor-not-allowed",

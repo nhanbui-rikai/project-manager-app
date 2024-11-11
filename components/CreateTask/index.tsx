@@ -100,6 +100,8 @@ export default function CreateTaskPopup({
     if (onSubmit) {
       return onSubmit({ values, members });
     }
+    taskForm.reset();
+    setMembers([]);
   };
 
   useEffect(() => {
