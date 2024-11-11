@@ -5,50 +5,51 @@
       "project": "Projects",
       "task": "Tasks",
       "setting": "Settings",
-      "user": "Users"
+      "user": "Users",
+      "profile": "Profile"
     },
     "profilePage": {
       "title": "Personal Infor",
       "userNameLabel": "User Name",
-      "phoneNumberLabel":"Mobile",
+      "phoneNumberLabel": "Mobile",
       "genderLabel": "Gender",
       "aboutMeLabel": "About me",
       "updateBtn": "Save",
       "genderMale": "Male",
       "genderFemale": "Female",
-      "followBtn":"Follow",
+      "followBtn": "Follow",
       "toastSuccess": "Update profile successfully",
       "toastFail": "Update profile unsuccessfully"
     },
     "taskEditor": {
-      "memberLabel":"Members",
+      "memberLabel": "Members",
       "titleLabel": "Title",
-      "descriptionLabel":"Describe",
-      "estimatedHourLabel":"Estimated hours",
-      "actualHourLabel":"Actual hours",
+      "descriptionLabel": "Describe",
+      "estimatedHourLabel": "Estimated hours",
+      "actualHourLabel": "Actual hours",
       "duedateLabel": "Due date",
-      "leaveBtn":"Leave",
+      "leaveBtn": "Leave",
       "joinBtn": "Join",
       "completedStatus": "Completed",
       "pendingStatus": "Pending",
-      "dayLabel" : "Day",
+      "dayLabel": "Day",
       "desciptionExample": "Add more detailed description...",
       "saveBtn": "Save",
       "noResult": "No result"
     },
     "passwordPage": {
-      "title":"Change your password",
-      "oldPasswordLabel":"Old password",
+      "title": "Change your password",
+      "oldPasswordLabel": "Old password",
       "newPasswordLabel": "New password",
       "confirmPasswordLabel": "Confirm password",
-      "success":"Change password successfully",
+      "success": "Change password successfully",
       "fail": "Change password unsuccessfully",
-      "passwordIncorrect":"Current password is incorrect",
+      "passwordIncorrect": "Current password is incorrect",
       "saveBtn": "Save"
     },
-    "login":{
-      "emailLabel":"Email",
-      "passwordLabel":"Password",
+    "login": {
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
       "toastSuccess": "Login successfully",
       "toastFail": "Login unsuccessfully"
     },
@@ -61,34 +62,61 @@
       "toastFail": "Create task unsuccessfully"
     },
     "updateTask": {
-      "toastSuccess":"Update task successfully",
+      "toastSuccess": "Update task successfully",
       "toastFail": "Update  task unsuccessfully"
     },
     "registerLabel": "Register",
-    "loginLabel":"Login",
-    "dontHaveAccount":"Don't have account?",
-    "haveAccount":"Already have an account yet",
-    "now":"now"
+    "loginLabel": "Login",
+    "dontHaveAccount": "Don't have account?",
+    "haveAccount": "Already have an account yet",
+    "now": "now"
   },
   "no_data": "No data",
   "message": {
     "delete_success": "Delete Successfully",
     "delete_err": "Delete Failure"
   },
-  "userPage":{
-    "idLabel":"Id",
-    "emailLabel":"Email",
-    "roleLabel":"Role",
-    "createdLabel":"Created At",
-    "updatedAtLabel":"Updated At",
+  "userPage": {
+    "idLabel": "Id",
+    "emailLabel": "Email",
+    "roleLabel": "Role",
+    "createdLabel": "Created At",
+    "updatedAtLabel": "Updated At",
     "actionLabel": "Actions",
-     "rowLabel": "Rows per page"
+    "rowLabel": "Rows per page"
   },
   "deleteTaskModal": {
     "header": "Are you sure you want to delete this card?",
-    "description":"All data in the card will be erased and cannot be recovered",
-    "cancelBtn":"Cancel",
-    "deleteBtn":"Delete"
-  }
- 
+    "description": "All data in the card will be erased and cannot be recovered",
+    "cancelBtn": "Cancel",
+    "deleteBtn": "Delete"
+  },
+  "button": {
+    "create_project": "Create New Project",
+    "edit": "Edit",
+    "cancel": "Cancel"
+  },
+  "table": {
+    "email": "Email",
+    "project": "Projects",
+    "description": "Description",
+    "member": "Member",
+    "duration": "Duration",
+    "action": "Action",
+    "role": "Role",
+    "created_at": "Created At",
+    "updated_at": "Updated At"
+  },
+  "create_new_project": {
+    "name": "Name",
+    "description": "Description",
+    "start_date": "Start Date",
+    "end_date": "End date",
+    "member": "Member"
+  },
+  "msg": {
+    "success": "successfully",
+    "error": "An error occurred"
+  },
+  "logout": "Logout"
 }

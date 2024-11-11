@@ -5,7 +5,8 @@
       "project": "Dự án",
       "task": "Nhiệm vụ",
       "setting": "Cài đặt",
-      "user": "Người dùng"
+      "user": "Người dùng",
+      "profile": "Hồ sơ"
     },
     "profilePage": {
       "title": "Thông tin cá nhân",
@@ -43,12 +44,12 @@
       "confirmPasswordLabel": "Xác nhận lại mật khẩu",
       "success": "Thay đổi mật khẩu thành công",
       "fail": "Thay đổi mật khẩu thất bại",
-      "passwordIncorrect":"Mật khẩu cũ không chính xác",
+      "passwordIncorrect": "Mật khẩu cũ không chính xác",
       "saveBtn": "Lưu"
     },
-    "login":{
-      "emailLabel":"Email",
-      "passwordLabel":"Mật khẩu",
+    "login": {
+      "emailLabel": "Email",
+      "passwordLabel": "Mật khẩu",
       "toastSuccess": "Đăng nhập thành công",
       "toastFail": "Đăng nhập thất bại"
     },
@@ -59,32 +60,61 @@
       "toastSuccess": "Tạo task thành công"
     },
     "updateTask": {
-      "toastSuccess":"Cập nhật task thành công"
+      "toastSuccess": "Cập nhật task thành công"
     },
     "registerLabel": "Đăng ký",
-    "loginLabel":"Đăng nhập",
-    "dontHaveAccount":"Bạn không có tài khoản?",
-    "haveAccount":"Already have an account yet",
-    "now":"ngay bây giờ"
+    "loginLabel": "Đăng nhập",
+    "dontHaveAccount": "Bạn không có tài khoản?",
+    "haveAccount": "Already have an account yet",
+    "now": "ngay bây giờ"
   },
   "no_data": "Không có dữ liệu",
   "message": {
     "delete_success": "Xoá thành công",
     "delete_err": "Xóa không thành công"
   },
-  "userPage":{
-    "idLabel":"Id",
-    "emailLabel":"Email",
-    "roleLabel":"Quyền",
-    "createdLabel":"Ngày tạo",
-    "updatedAtLabel":"Ngày cập nhật gần nhất",
+  "userPage": {
+    "idLabel": "Id",
+    "emailLabel": "Email",
+    "roleLabel": "Quyền",
+    "createdLabel": "Ngày tạo",
+    "updatedAtLabel": "Ngày cập nhật gần nhất",
     "actionLabel": "Chức năng",
     "rowLabel": "Số hàng trên 1 trang"
   },
   "deleteTaskModal": {
     "header": "Bạn có chắc muốn xóa thẻ này không?",
-    "description":"Dữ liệu toàn bộ trong thẻ sẽ bị xóa và không thể hoàn lại",
-    "cancelBtn":"Hủy",
-    "deleteBtn":"Xóa"
-  }
+    "description": "Dữ liệu toàn bộ trong thẻ sẽ bị xóa và không thể hoàn lại",
+    "cancelBtn": "Hủy",
+    "deleteBtn": "Xóa"
+  },
+  "button": {
+    "create_project": "Tạo dự án",
+    "edit": "Chỉnh sửa",
+    "cancel": "Huỷ",
+    "submit": "Tạo mới"
+  },
+  "table": {
+    "email": "Email",
+    "project": "Dự án",
+    "description": "Mô tả",
+    "member": "Thành viên",
+    "duration": "Thời gian",
+    "action": "Chức năng",
+    "role": "Vai trò",
+    "created_at": "Ngày tạo",
+    "updated_at": "Ngày cập nhật gần nhất"
+  },
+  "create_new_project": {
+    "name": "Tên dự án",
+    "description": "Mô tả",
+    "start_date": "Ngày bắt đầu",
+    "end_date": "Ngày kết thúc",
+    "member": "Thành viên"
+  },
+  "msg": {
+    "success": "Thành công",
+    "error": "Không thành công"
+  },
+  "logout": "Đăng xuất"
 }

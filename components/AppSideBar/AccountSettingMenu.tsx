@@ -12,12 +12,14 @@ import { useAppDispatch } from "@/hooks/useStore";
 import { logout } from "@/lib/store/feature/auth.slice";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function AccountSettingMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { t } = useTranslation("en");
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -26,7 +28,7 @@ export default function AccountSettingMenu() {
   };
 
   const logOut = () => {
-    toast.success("Logout successfully", { position: "top-center" });
+    toast.success(t("msg.success"), { position: "top-center" });
     dispatch(logout("logout"));
     handleClose();
     router.push("/login");
@@ -89,7 +91,7 @@ export default function AccountSettingMenu() {
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {t("logout")}
         </MenuItem>
       </Menu>
     </Fragment>

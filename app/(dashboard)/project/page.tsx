@@ -56,11 +56,11 @@ const ProjectPage = () => {
 
   const column = [
     { id: "id", name: "ID" },
-    { id: "project", name: "Project" },
-    { id: "desc", name: "Description" },
-    { id: "member", name: "Members" },
-    { id: "duration", name: "Duration" },
-    { id: "action", name: "Action" },
+    { id: "project", name: t("table.project") },
+    { id: "desc", name: t("table.description") },
+    { id: "member", name: t("table.member") },
+    { id: "duration", name: t("table.duration") },
+    { id: "action", name: t("table.action") },
   ];
   const fetchData = async (): Promise<void> => {
     try {
@@ -80,7 +80,7 @@ const ProjectPage = () => {
       }
       setData(res || null);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "An error occurred");
+      toast.error(error instanceof Error ? error.message : t("msg.error"));
     } finally {
       setLoading(false);
       dispatch(setAppLoading(false));
@@ -92,14 +92,14 @@ const ProjectPage = () => {
       setRemoveLoading(true);
       const res = await updateProject(selectedProject, { deleted: true });
       if (res) {
-        toast.success("Deleted successfully", {
+        toast.success(t("msg.success"), {
           position: "top-center",
         });
 
         fetchData();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "An error occurred");
+      toast.error(error instanceof Error ? error.message : t("msg.error"));
     } finally {
       setRemoveLoading(false);
       setOpenRemoveModal(false);
@@ -169,10 +169,10 @@ const ProjectPage = () => {
         handleCloseCreateProjectModal={handleCloseCreateProjectModal}
       />
       <div className="flex justify-between">
-        <Typography className="font-bold">Projects</Typography>
+        <Typography className="font-bold">{t("app.sidebar.project")}</Typography>
         <Button
           onClick={() => setOpenCreateProjectModal(true)}
-          name="Create Project"
+          name={t("button.create_project")}
           className="bg-primary text-white"
         />
       </div>

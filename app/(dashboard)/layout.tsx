@@ -10,20 +10,22 @@ import WorkIcon from "@mui/icons-material/Work";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import RenderCondition from "@/components/RederCondition";
+import { useTranslation } from "react-i18next";
 const LandingLayout = ({ children }: { children: React.ReactNode }) => {
   const { isOpenOrClose } = useAppSelector((state) => state.app);
   const { isAdmin } = useAppSelector((state) => state.auth);
+  const { t } = useTranslation();
 
   return (
     <main className="w-full h-screen bg-slate-200">
       <ExpandSideBar>
         <div className="w-full">
-          <MenuSidebarItems icon={<WorkIcon />} path="/project" name="Projects" />
+          <MenuSidebarItems icon={<WorkIcon />} path="/project" name={t("app.sidebar.project") || "Projects"} />
           <RenderCondition condition={isAdmin}>
-            <MenuSidebarItems icon={<PeopleAltIcon />} path="/user" name="User" />
+            <MenuSidebarItems icon={<PeopleAltIcon />} path="/user" name={t("app.sidebar.user")||"User"} />
           </RenderCondition>
-          <MenuSidebarItems icon={<PersonIcon />} path="/profile" name="Profile" />
-          <MenuSidebarItems icon={<SettingsIcon />} path="/password" name="Settings" />
+          <MenuSidebarItems icon={<PersonIcon />} path="/profile" name={t("app.sidebar.profile")||"Profile"} />
+          <MenuSidebarItems icon={<SettingsIcon />} path="/password" name={t("app.sidebar.setting")||"Settings"} />
         </div>
       </ExpandSideBar>
 

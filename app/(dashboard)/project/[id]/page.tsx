@@ -281,7 +281,7 @@ const DetailProjectPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className={cn("grid grid-cols-1 gap-5")}>
           <div className="col-span-1">
             <TextInput
               label="Name"
@@ -298,7 +298,7 @@ const DetailProjectPage: React.FC = () => {
               onBlur={() => handleResetError("name")}
             />
 
-            <div className="flex justify-start gap-10 w-full items-center">
+            <div className="flex flex-col justify-start gap-5 w-full items-center">
               <DateInput
                 label="Start Date"
                 id="start_date"

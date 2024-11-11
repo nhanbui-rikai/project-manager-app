@@ -15,6 +15,7 @@ import db from "@/lib/firebase/firestore";
 import RenderCondition from "../RederCondition";
 import LoadingSpinner from "../LoadingSpinner";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   name: string;
@@ -67,6 +68,8 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   } = useForm<FormData>({
     defaultValues: {},
   });
+  const { t } = useTranslation("en");
+
   const handleResetError = (field: keyof FormData) => {
     clearErrors([field]);
   };
@@ -87,14 +90,14 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       const res = await createProject(newData);
 
       if (res) {
-        toast.success("Create project Success", {
+        toast.success(t("msg.success"), {
           position: "top-center",
         });
         fetchData();
         handleClose();
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "An error occurred");
+      toast.error(error instanceof Error ? error.message : t("msg.error"));
     } finally {
       setLoading(false);
     }
@@ -122,7 +125,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             open={openCreateProjectModal}
           >
             <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-              <Typography className="font-bold">Create New Project</Typography>
+              <Typography className="font-bold">{t("button.create_project")}</Typography>
             </DialogTitle>
 
             <IconButton
@@ -140,7 +143,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             <DialogContent className="min-w-96 max-w-4xl" dividers>
               <div className="grid grid-cols-1 gap-5 justify-between w-full">
                 <TextInput
-                  label="Name"
+                  label={t("create_new_project.name")}
                   id="name"
                   variant="outlined"
                   className={`w-full col-span-1`}
@@ -154,7 +157,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 />
 
                 <TextArea
-                  label="Description"
+                  label={t("create_new_project.description")}
                   id="description"
                   variant="outlined"
                   className={`w-full col-span-1`}
@@ -165,7 +168,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 />
 
                 <DateInput
-                  label="Start Date"
+                  label={t("create_new_project.start_date")}
                   id="start_date"
                   variant="outlined"
                   error={!!errors.start_date}
@@ -176,7 +179,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 />
 
                 <DateInput
-                  label="End Date"
+                  label={t("create_new_project.end_date")}
                   id="end_date"
                   variant="outlined"
                   error={!!errors.end_date}
@@ -195,7 +198,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                     render={({ field }) => (
                       <MultiSelector
                         {...field}
-                        label="Members"
+                        label={t("create_new_project.member")}
                         id="members"
                         variant="outlined"
                         error={!!errors.members}
@@ -223,10 +226,10 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 <RenderCondition condition={loading}>
                   <LoadingSpinner className="text-sm" />
                 </RenderCondition>
-                Submit
+                {t("button.submit")}
               </Button>
               <Button onClick={handleClose} variant="contained" color="inherit">
-                Cancel
+                {t("button.cancel")}
               </Button>
             </DialogActions>
           </BootstrapDialog>

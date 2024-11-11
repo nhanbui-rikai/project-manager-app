@@ -40,7 +40,7 @@ export default function UserPage() {
     { id: "id", name: t("userPage.idLabel") },
     { id: "email", name: t("userPage.emailLabel") },
     { id: "role", name: t("userPage.roleLabel") },
-    { id: "created_at", name: t("userPage.createdAtLabel") },
+    { id: "created_at", name: t("userPage.createdLabel") },
     { id: "updated_at", name: t("userPage.updatedAtLabel") },
     { id: "action", name: t("userPage.actionLabel") },
   ];

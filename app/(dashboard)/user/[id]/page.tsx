@@ -89,7 +89,7 @@ const DetailUserPage = () => {
         <Typography className="font-bold">DetailUser</Typography>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 gap-5">
           <div className="col-span-1">
             <TextInput
               label="Name"
@@ -106,7 +106,7 @@ const DetailUserPage = () => {
               onBlur={() => handleResetError("user_name")}
             />
 
-            <div className="flex gap-3 mb-3">
+            <div className="flex flex-col gap-5">
               <Controller
                 name="gender"
                 control={control}
@@ -186,7 +186,7 @@ const DetailUserPage = () => {
             />
           </div>
 
-          <div className="col-span-2">
+          <div className="col-span-1">
             <TextArea
               label="Bio"
               id="bio"
